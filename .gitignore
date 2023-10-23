@@ -273,3 +273,5 @@ tags
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,java,intellij,vim,macos
 n
+
+.idea/
