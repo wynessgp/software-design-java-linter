@@ -12,11 +12,8 @@ Canon Maranda, Bee Cerasoli, Grant Wyness
 - Grant Wyness: [Engineering Notebook](engineering-notebooks/GrantWyness.md)
 
 ## Features
-
-
-| Developer    | Style Check  | Principle Check    | Pattern Check    | A Feature (optional) |
-|:-------------|:-------------|:-------------------|:-----------------|:---------------------|
-| Canon Maranda|              |                    |                  |                      |
-| Bee Cerasoli |Formatting    |3 Layer Principle   |Strategy Pattern  |                      |
-| Grant Wyness |Unused "items"|Hollywood Principle |Decorator Pattern |Unused "item" deletion|
-
+| Developer     | Style Check    | Principle Check     | Pattern Check     | A Feature (optional)   |
+|:--------------|:---------------|:--------------------|:------------------|:-----------------------|
+| Canon Maranda | Static methods | Information hiding  | Facade pattern    | Command-line interface |
+| Bee Cerasoli  | Formatting     | 3 Layer Principle   | Strategy Pattern  |                        |
+| Grant Wyness  | Unused "items" | Hollywood Principle | Decorator Pattern | Unused "item" deletion |
