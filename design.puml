@@ -1,3 +1,116 @@
 @startuml
-note "Replace this with your work" as N1
+package presentation {
+    +class Main {
+        +{static} main(args: String[]): void
+
+    }
+}
+package domain {
+    ' +abstract class ClassNode {
+    '     -access: int
+    '     -fields: List<FieldNode>
+    '     -innerClasses: Map<String, int>
+    '     -interfaces: List<String>
+    '     -name: String
+    '     -superName: String
+    ' }
+    ' +abstract class FieldNode {
+    '     -access: int
+    '     -desc: String
+    '     -name: String
+    '     -value: Object
+    ' }
+    ' +abstract class MethodNode {
+    '     -access: int
+    '     -desc: String
+    '     -exceptions: List<String>
+    '     -name: String
+    '     -params: Map<String, List<String>>
+    ' }
+    ' +abstract class InnerClassNode {
+
+    ' }
+    +interface StyleCheckStrategy {
+        +performCheck()
+        +handleResults(preferences)
+    }
+    +class StaticMethodCheck {
+
+    }
+    +class FormattingCheck {
+
+    }
+    +class UnusedItemsCheck {
+
+    }
+    UnusedItemsCheck .u.|> StyleCheckStrategy
+    FormattingCheck .u.|> StyleCheckStrategy
+    StaticMethodCheck .u.|> StyleCheckStrategy
+
+    +interface PrincipleCheckStrategy {
+        +performCheck()
+        +handleResults(preferences)
+    }
+    +class InformationHidingCheck {
+
+    }
+    +class ThreeLayerCheck {
+
+    }
+    +class HollywoodCheck {
+
+    }
+    InformationHidingCheck .u.|> PrincipleCheckStrategy
+    ThreeLayerCheck .u.|> PrincipleCheckStrategy
+    HollywoodCheck .u.|> PrincipleCheckStrategy
+
+    +interface PatternCheckStrategy {
+        +performCheck()
+        +handleResults(preferences)
+    }
+    +class FacadeCheck {
+
+    }
+    +class StrategyCheck {
+
+    }
+    +class DecoratorCheck {
+
+    }
+    FacadeCheck .u.|> PatternCheckStrategy
+    StrategyCheck .u.|> PatternCheckStrategy
+    DecoratorCheck .u.|> PatternCheckStrategy
+
+}
+package datasource {
+    +interface StandardOutput {
+        +write(): void
+    }
+    +class ConsoleOutput {
+        -outStream: FileOutputStream
+        +ConsoleOutput(fs: FileOutputStream)
+        {method} // interface methods...
+    }
+    +class FileOutput {
+        -filepath: String
+        -bufferedWriter: BufferedWriter
+        +ConsoleOutput(fp: String)
+        {method} // interface methods...
+    }
+    +interface StandardInput {
+        +nextLine(): String
+        +hasNext(): boolean
+        +nextInt(): int
+        +next(): String
+    }
+    +class ConsoleInput {
+        -scan: Scanner
+        -fileStream: FileInputStream
+        +ConsoleInput(fs: FileInputStream)
+        {method} // interface methods...
+    }
+    ConsoleInput .u.|> StandardInput
+    ConsoleOutput .u.|> StandardOutput
+    FileOutput .u.|> StandardOutput
+}
 @enduml
