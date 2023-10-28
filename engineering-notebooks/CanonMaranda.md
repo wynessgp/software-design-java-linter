@@ -37,9 +37,22 @@
   - Potentially check by package
 - Created initial [UML diagram](../design.puml)
 
-## 10/28 3-5pm
+## 10/28 3-4pm
 ### Plan:
 - Discuss initial design from 10/26
 - Continue work on basic algorithm implementations
+  - Main priority, have algorithm ideas ready before design is implemented
 
 ### Progress:
+- Looked over design
+  - Good start
+  - Will continue on Monday
+- Continue looking at basic algorithm implementations (outside of project directory)
+  - Static method check will generate a list of all methods declared as static
+    - Look through all of code to find method calls
+    - If a static method is called using an instantiated object, show an error
+  - Information hiding check will generate a list of all fields with public visibility
+    - Consider showing errors when a field is package private
+  - Facade pattern check will find all class dependencies
+    - Show an error if a single class does not handle inner method calls
+    - Consider checking by package
