@@ -36,3 +36,10 @@
   - Look for class that calls many methods from other classes, but no classes call its methods
   - Potentially check by package
 - Created initial [UML diagram](../design.puml)
+
+## 10/28 3-5pm
+### Plan:
+- Discuss initial design from 10/26
+- Continue work on basic algorithm implementations
+
+### Progress:
