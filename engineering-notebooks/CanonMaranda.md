@@ -56,3 +56,15 @@
   - Facade pattern check will find all class dependencies
     - Show an error if a single class does not handle inner method calls
     - Consider checking by package
+
+## 10/30 10:30am-12pm
+### Plan:
+- Implement basic algorithms
+
+### Progress:
+- Work on algorithms
+  - Static opcodes are the same when accessing statically or through an object
+    - Look into a way around this
+  - Everything else should be doable (without looking at source code)
+  - Finish all but static methods by Wednesday before class
+- Continue design work on Wednesday
