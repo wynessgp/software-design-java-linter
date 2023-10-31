@@ -68,3 +68,24 @@
   - Everything else should be doable (without looking at source code)
   - Finish all but static methods by Wednesday before class
 - Continue design work on Wednesday
+
+## 10/31 10-11am
+### Plan:
+- Finish information hiding and facade pattern algorithms
+
+### Progress:
+- Information hiding
+  - Look at each variable in a class
+  - If it's public, tell the user that information hiding is violated
+- Facade pattern
+  - Look at everything in each class
+    - Superclasses and interfaces
+    - Declared fields
+    - Method parameters and return types
+    - Locally declared variables
+  - Map each external class occurrence to the current class
+    - Ignore Java objects and primitive types
+  - After the entire project is parsed
+    - Duplicate the set of classes
+    - If a class ever maps to a value inside the new set, remove it
+    - The remaining classes are facades
