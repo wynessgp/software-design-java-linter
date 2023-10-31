@@ -52,3 +52,27 @@
 ### Progress:
 - Managed to get the idea of checking local variables working, but need to do more fine-tuning as it should really only flag if it's initialized to a value but never used afterwards.
 - Not much done in terms of other two checks yet. Decorator shouldn't be too bad; neither should Hollywood - there's just a bit of difficulty from the fact that they rely on having multiple classes as input.
+
+## 10/30 10:30am-12pm
+### Plan:
+- Continue implementation work on basic algos, better form than ASM Example was given in
+
+### Progress:
+- Unused "items"
+    - Checks for private fields, private methods working correctly
+    - Checks for local variables within a method working correctly
+    - Public/protected/default seem to be a little more difficult than anticipated
+        - Need to have "hooks" that say we're anticipating this method be used after analyzing a class
+    - Should be finished by Wednesday before class
+- Hollywood Principle
+    - No current implementation progress
+    - Anticipate that once I get public/protected checking down with unused "items" this should follow super quickly
+    - Plan is to see if a field is private, then see if a getter is utilized to make a comparison
+    - Should be finished by Wednesday before class
+- Decorator Pattern
+    - No current implementation progress
+    - Need some familiarity with chains between classes, again should follow from unused "items"
+    - Should be finished by Wednesday before class (hopefully)
+- Do mostly design work on Wednesday, so we can get the parts put together
+- Looked into building tests.
+
