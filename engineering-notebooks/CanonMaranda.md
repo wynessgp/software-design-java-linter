@@ -89,3 +89,13 @@
     - Duplicate the set of classes
     - If a class ever maps to a value inside the new set, remove it
     - The remaining classes are facades
+
+## 11/1 11am-12pm
+### Plan:
+- Discuss algorithm implementations
+- Continue work on design
+
+### Progress:
+- Update design based on what is needed for algorithms
+  - Pattern to abstract linter checks, parsing types
+  - Continue design work during next meeting
