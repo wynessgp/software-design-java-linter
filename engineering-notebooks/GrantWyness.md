@@ -76,3 +76,14 @@
 - Do mostly design work on Wednesday, so we can get the parts put together
 - Looked into building tests.
 
+## 11/1 11am-12pm
+### Plan:
+- Discuss commonalities between algorithms to try and incorperate it into design
+- Work on design
+
+### Progress: 
+- Removed strategy pattern for three different styles of checks, consolidated to a single abstract class
+- Abstracted the various parses that we do for classes, methods, instructions, fields.
+    - Still need to work out parameters
+- A little more work done on algos
+
