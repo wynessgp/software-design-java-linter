@@ -2,8 +2,16 @@
 package presentation {
     +class Main {
         +{static} main(args: String[]): void
-
     }
+    +class UI {
+        +show()
+        +displayResults()
+        +displayPreferencePicker()
+        +displayInputUI()
+        +handleUserPreferences()
+        +handleLinterInputs()
+    }
+    Main .l.> UI
 }
 package domain {
     ' +abstract class ClassNode {
@@ -30,56 +38,75 @@ package domain {
     ' +abstract class InnerClassNode {
 
     ' }
-    +interface StyleCheckStrategy {
-        +performCheck()
-        +handleResults(preferences)
+    +abstract class CheckStrategy {
+        #parsers: List<ParseOption>
+        +{abstract} performCheck(classes: List<String>)
+        +{abstract} handleResults(preferences: Properties)
     }
-    +class StaticMethodCheck {
+    +interface ParseOption {
+        +parse(thingsToParse: List<String>)
+    }
+    +class ParseFields {
+        +parse()
+    }
+    +class ParseMethods {
+        +parse()
+        -parseInstructionsForMethod()
+    }
+    +class ParseClasses {
+        +parse()
+    }
+    
+    ParseFields .u.|> ParseOption
+    ParseClasses .u.|> ParseOption
+    ParseMethods .u.|> ParseOption
+    CheckStrategy -r-> "*" ParseOption
 
+    +class StaticMethodCheck {
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
     }
     +class FormattingCheck {
-
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
     }
     +class UnusedItemsCheck {
-
-    }
-    UnusedItemsCheck .u.|> StyleCheckStrategy
-    FormattingCheck .u.|> StyleCheckStrategy
-    StaticMethodCheck .u.|> StyleCheckStrategy
-
-    +interface PrincipleCheckStrategy {
-        +performCheck()
-        +handleResults(preferences)
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
     }
     +class InformationHidingCheck {
-
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
     }
     +class ThreeLayerCheck {
-
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
     }
     +class HollywoodCheck {
-
-    }
-    InformationHidingCheck .u.|> PrincipleCheckStrategy
-    ThreeLayerCheck .u.|> PrincipleCheckStrategy
-    HollywoodCheck .u.|> PrincipleCheckStrategy
-
-    +interface PatternCheckStrategy {
-        +performCheck()
-        +handleResults(preferences)
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
     }
     +class FacadeCheck {
-
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
     }
     +class StrategyCheck {
-
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
     }
     +class DecoratorCheck {
-
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
     }
-    FacadeCheck .u.|> PatternCheckStrategy
-    StrategyCheck .u.|> PatternCheckStrategy
-    DecoratorCheck .u.|> PatternCheckStrategy
+    InformationHidingCheck -u-|> CheckStrategy
+    ThreeLayerCheck -u-|> CheckStrategy
+    HollywoodCheck -u-|> CheckStrategy
+    UnusedItemsCheck -u-|> CheckStrategy
+    FormattingCheck -u-|> CheckStrategy
+    StaticMethodCheck -u-|> CheckStrategy
+    FacadeCheck -u-|> CheckStrategy
+    StrategyCheck -u-|> CheckStrategy
+    DecoratorCheck -u-|> CheckStrategy
 
 }
 package datasource {
