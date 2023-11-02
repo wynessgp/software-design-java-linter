@@ -99,3 +99,16 @@
 - Update design based on what is needed for algorithms
   - Pattern to abstract linter checks, parsing types
   - Continue design work during next meeting
+
+## 11/2 10am-12pm
+### Plan:
+- Finalize design
+
+### Progress:
+- Redefine static check
+  - Should not define instance of an object that only has public static methods
+  - Create algorithm by Monday
+- Continue work on design
+  - Create bytecode abstraction tree
+  - Separate console and file writing
+  - Need to work on presentation layer
