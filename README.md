@@ -14,6 +14,6 @@ Canon Maranda, Bee Cerasoli, Grant Wyness
 ## Features
 | Developer     | Style Check    | Principle Check     | Pattern Check     | A Feature (optional)   |
 |:--------------|:---------------|:--------------------|:------------------|:-----------------------|
-| Canon Maranda | Static methods | Information hiding  | Facade pattern    |                        |
-| Bee Cerasoli  | Formatting     | 3 Layer Principle   | Strategy Pattern  |                        |
+| Canon Maranda | Static methods | Information hiding  | Facade pattern    | Code to UML            |
+| Bee Cerasoli  | Formatting     | 3 Layer Principle   | Strategy Pattern  | UML to code            |
 | Grant Wyness  | Unused "items" | Hollywood Principle | Decorator Pattern | Unused "item" deletion |
