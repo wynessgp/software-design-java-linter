@@ -87,3 +87,25 @@
     - Still need to work out parameters
 - A little more work done on algos
 
+## 11/2 10am-12pm
+### Plan:
+- Work on design
+
+### Progress
+- Abstracted the domain layer so that other libraries could be used, but enabled ourselves to properly use ASM on the backend
+- Still need to finalize presentation layer
+    - I suspect this will have less to do with my algorithms (as they just need results printed, largely) and will have more to do with my teammate's algos/features
+
+## 11/4 6pm-11pm
+### Plan:
+- Nail down my algorithms so they can be directly put into the domain layer, once all of our design is decided
+- Write more test cases
+
+### Progress
+- Graph traversal to properly check public/protected fields & methods now working for unused items
+    - Code needs heavy refactoring to get it into proper shape
+- "Happy path" for decorator pattern implemented
+    - Need to work on graph traversals for this too
+    - Otherwise, we won't be able to do checks if classes are not passed in appropriate order
+- Hollywood Pattern still proving a little elusive (although other algos have stolen my time for the most part)
+
