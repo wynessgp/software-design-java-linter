@@ -1,21 +1,44 @@
 @startuml
 package presentation {
     +class Main {
+        -userInterface: UserInterface
         +{static} main(args: String[]): void
     }
-    +class UI {
-        +show()
-        +displayResults()
-        +displayPreferencePicker()
-        +displayInputUI()
-        +handleUserPreferences()
-        +handleLinterInputs()
+    +interface UserInterface {
+        +display(): void
     }
-    +class ConsoleOutput {
+    +interface UserInput {
+        +getNextLine(): String
+    }
+    +class ConsoleUserInterface implements UserInterface {
+        -userInput: UserInput
+        -projectDirectory: File
+        -checksToRun: List<CheckStrategy>
+        -reader: StandardInput
+        -writer: StandardOutput
+        +display(): void
+        -promptForWorkingDirectory(): void
+        -displayDetectedFiles(): void
+        -promptForCheckOptions(): void
+        -displayCheckResults(): void
+        -promptForSavingResults(): void
+        -saveResults(): void
+        -promptForCodeCleanup(): void
+        -promptForUMLGeneration(): void
+        -promptForSkeletonCodeGeneration(): void
+    }
+    +class ConsoleScanner implements UserInput {
+        -scanner: Scanner
+        +getNextLine(): String
+    }
 
-    }
-    Main .l.> UI
+    Main -> UserInterface
+    ConsoleUserInterface -> UserInput
 }
+ConsoleUserInterface -> "*" domain.CheckStrategy
+ConsoleUserInterface -> "*" datasource.StandardInput
+ConsoleUserInterface -> "*" datasource.StandardOutput
+
 package domain {
     +interface ClassNode {
         +getFields(): List<FieldNode>
@@ -133,8 +156,6 @@ package domain {
     MethodInstructionNodeASM .u.|> MethodInstructionNode
     FieldInstructionNodeASM .u.|> FieldInstructionNode
 
-
-   
     +abstract class CheckStrategy {
         #parsers: List<ParseOption>
         +{abstract} performCheck(classes: List<String>)
@@ -176,6 +197,7 @@ package domain {
         +performCheck(classes: List<String>)
         +handleResults(preferences: Properties)
     }
+
     InformationHidingCheck -u-|> CheckStrategy
     ThreeLayerCheck -u-|> CheckStrategy
     HollywoodCheck -u-|> CheckStrategy
@@ -185,7 +207,6 @@ package domain {
     FacadeCheck -u-|> CheckStrategy
     StrategyCheck -u-|> CheckStrategy
     DecoratorCheck -u-|> CheckStrategy
-
 }
 package datasource {
     +interface StandardOutput {
@@ -209,6 +230,7 @@ package datasource {
         +ConsoleInput(fs: FileInputStream)
         {method} // interface methods...
     }
+
     ConsoleInput .u.|> StandardInput
     FileOutput .u.|> StandardOutput
 }
@@ -216,23 +238,18 @@ package datasource {
 package asm {
     package tree {
         +class asm.tree.ClassNode {
-
         }
         +class asm.tree.MethodNode {
-
         }
         +class asm.tree.FieldNode {
-
         }
         +class asm.tree.AbstractInsnNode {
-
         }
         +class asm.tree.FieldInsnNode {
-
         }
         +class asm.tree.MethodInsnNode {
-
         }
+
         asm.tree.MethodInsnNode -u-|> asm.tree.AbstractInsnNode
         asm.tree.FieldInsnNode -u-|> asm.tree.AbstractInsnNode
         asm.tree.ClassNode -d-> "*" asm.tree.FieldNode
@@ -247,7 +264,4 @@ MethodNodeASM --> asm.tree.MethodNode
 InstructionNodeASM --> asm.tree.AbstractInsnNode
 MethodInstructionNodeASM --> asm.tree.MethodInsnNode
 FieldInstructionNodeASM --> asm.tree.FieldInsnNode
-
-
-
 @enduml
