@@ -112,3 +112,28 @@
   - Create bytecode abstraction tree
   - Separate console and file writing
   - Need to work on presentation layer
+
+## 11/4 8:30-10pm
+### Plan:
+- Finish new static check algorithm
+- Work on presentation layer of design
+
+### Progress:
+- Added static check algorithm to example code
+  - Additional modifiers check with Opcodes.ACC_* + Opcodes.ACC_*
+  - Ignore initialization methods (\<init>, \<clinit>)
+  - Remove non-static classes from list of visited classes
+  - Recurse through field declarations
+  - If a declaration is from a "static" class, flag it
+- Updated presentation layer
+  - Abstract UI and input class structure
+  - User input performs the following functions:
+    - Get working directory
+      - Future: parse directory in domain layer
+    - Ask to enable/disable checks
+    - Display results
+    - Ask to save results
+    - Ask to perform additional features
+      - Code cleanup (unused vars)
+      - Code to UML
+      - UML to code
