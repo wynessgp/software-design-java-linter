@@ -1,3 +1,267 @@
 @startuml
-note "Replace this with your work" as N1
+package presentation {
+    +class Main {
+        -userInterface: UserInterface
+        +{static} main(args: String[]): void
+    }
+    +interface UserInterface {
+        +display(): void
+    }
+    +interface UserInput {
+        +getNextLine(): String
+    }
+    +class ConsoleUserInterface implements UserInterface {
+        -userInput: UserInput
+        -projectDirectory: File
+        -checksToRun: List<CheckStrategy>
+        -reader: StandardInput
+        -writer: StandardOutput
+        +display(): void
+        -promptForWorkingDirectory(): void
+        -displayDetectedFiles(): void
+        -promptForCheckOptions(): void
+        -displayCheckResults(): void
+        -promptForSavingResults(): void
+        -saveResults(): void
+        -promptForCodeCleanup(): void
+        -promptForUMLGeneration(): void
+        -promptForSkeletonCodeGeneration(): void
+    }
+    +class ConsoleScanner implements UserInput {
+        -scanner: Scanner
+        +getNextLine(): String
+    }
+
+    Main -> UserInterface
+    ConsoleUserInterface -> UserInput
+}
+ConsoleUserInterface -> "*" domain.CheckStrategy
+ConsoleUserInterface -> "*" datasource.StandardInput
+ConsoleUserInterface -> "*" datasource.StandardOutput
+
+package domain {
+    +interface ClassNode {
+        +getFields(): List<FieldNode>
+        +getMethods(): List<MethodNode>
+        +getInterfaces(): List<String>
+        +getSuperName(): String
+        +getClassName(): String
+    }
+    +interface FieldNode {
+        +getAccess(): String
+        +getDesc(): String
+        +getFieldName(): String
+        +getFieldValue(): Object
+        +getFieldType(): String
+    }
+    +interface MethodNode {
+        +getAccess(): String
+        +getDesc(): String
+        +getMethodName(): String
+        +getInstructions(): InstructionNode
+        +getReturnType(): String
+        +getArgs(): Map<String, String>
+    }
+    +interface InstructionNode {
+        +matchesInstructionType(type: String): boolean
+        +getOpcode(): int
+        +getNextInstruction(): InstructionNode
+        +getPreviousInstruction(): InstructionNode
+    }
+    +interface MethodInstructionNode {
+        +matchesInstructionType(type: String): boolean
+        +getOpcode(): int
+        +getNextInstruction(): InstructionNode
+        +getPreviousInstruction(): InstructionNode
+        +getMethodName(): String
+        +getMethodOwner(): String
+        +getMethodDescription(): String
+    }
+    +interface FieldInstructionNode {
+        +matchesInstructionType(type: String): boolean
+        +getOpcode(): int
+        +getNextInstruction(): InstructionNode
+        +getPreviousInstruction(): InstructionNode
+        +getFieldName(): String
+        +getFieldOwner(): String
+        +getFieldDescription(): String
+    }
+
+    MethodInstructionNode -u-|> InstructionNode
+    FieldInstructionNode -u-|> InstructionNode
+    ClassNode .d.> FieldNode
+    ClassNode .d.> MethodNode
+    MethodInstructionNode .d.> InstructionNode
+    InstructionNode ..> InstructionNode
+    MethodNode .d.> InstructionNode
+    FieldInstructionNode .u.> InstructionNode
+
+    +class ClassNodeASM {
+        -classNode: ClassNode
+        +getFields(): List<FieldNode>
+        +getMethods(): List<MethodNode>
+        +getInterfaces(): List<String>
+        +getSuperName(): String
+        +getClassName(): String
+    }
+    +class MethodNodeASM {
+        -methodNode: MethodNode
+        +getAccess(): String
+        +getDesc(): String
+        +getMethodName(): String
+        +getInstructions(): InstructionNode
+        +getReturnType(): String
+        +getArgs(): Map<String, String>
+    }
+    +class FieldNodeASM {
+        -fieldNode: FieldNode
+        +getAccess(): String
+        +getDesc(): String
+        +getFieldName(): String
+        +getFieldValue(): Object
+        +getFieldType(): String
+    }
+    +class InstructionNodeASM {
+        -instructionNode: AbstractInsnNode
+        +matchesInstructionType(type: String): boolean
+        +getOpcode(): int
+        +getNextInstruction(): InstructionNode
+        +getPreviousInstruction(): InstructionNode
+    }
+    +class MethodInstructionNodeASM {
+        -methodInsnNode: MethodInsnNode
+        +matchesInstructionType(type: String): boolean
+        +getOpcode(): int
+        +getNextInstruction(): InstructionNode
+        +getPreviousInstruction(): InstructionNode
+        +getMethodName(): String
+        +getMethodOwner(): String
+        +getMethodDescription(): String
+    }
+    +class FieldInstructionNodeASM {
+        -fieldInsnNode: FieldInsnNode
+        +matchesInstructionType(type: String): boolean
+        +getOpcode(): int
+        +getNextInstruction(): InstructionNode
+        +getPreviousInstruction(): InstructionNode
+        +getFieldName(): String
+        +getFieldOwner(): String
+        +getFieldDescription(): String
+    }
+
+    ClassNodeASM .u.|> ClassNode
+    MethodNodeASM .u.|> MethodNode
+    FieldNodeASM .u.|> FieldNode
+    InstructionNodeASM .u.|> InstructionNode
+    MethodInstructionNodeASM .u.|> MethodInstructionNode
+    FieldInstructionNodeASM .u.|> FieldInstructionNode
+
+    +abstract class CheckStrategy {
+        #parsers: List<ParseOption>
+        +{abstract} performCheck(classes: List<String>)
+        +{abstract} handleResults(preferences: Properties)
+    }
+    +class StaticMethodCheck {
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
+    }
+    +class FormattingCheck {
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
+    }
+    +class UnusedItemsCheck {
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
+    }
+    +class InformationHidingCheck {
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
+    }
+    +class ThreeLayerCheck {
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
+    }
+    +class HollywoodCheck {
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
+    }
+    +class FacadeCheck {
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
+    }
+    +class StrategyCheck {
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
+    }
+    +class DecoratorCheck {
+        +performCheck(classes: List<String>)
+        +handleResults(preferences: Properties)
+    }
+
+    InformationHidingCheck -u-|> CheckStrategy
+    ThreeLayerCheck -u-|> CheckStrategy
+    HollywoodCheck -u-|> CheckStrategy
+    UnusedItemsCheck -u-|> CheckStrategy
+    FormattingCheck -u-|> CheckStrategy
+    StaticMethodCheck -u-|> CheckStrategy
+    FacadeCheck -u-|> CheckStrategy
+    StrategyCheck -u-|> CheckStrategy
+    DecoratorCheck -u-|> CheckStrategy
+}
+package datasource {
+    +interface StandardOutput {
+        +write(): void
+    }
+    +class FileOutput {
+        -filepath: String
+        -bufferedWriter: BufferedWriter
+        +ConsoleOutput(fp: String)
+        {method} // interface methods...
+    }
+    +interface StandardInput {
+        +nextLine(): String
+        +hasNext(): boolean
+        +nextInt(): int
+        +next(): String
+    }
+    +class ConsoleInput {
+        -scan: Scanner
+        -fileStream: FileInputStream
+        +ConsoleInput(fs: FileInputStream)
+        {method} // interface methods...
+    }
+
+    ConsoleInput .u.|> StandardInput
+    FileOutput .u.|> StandardOutput
+}
+
+package asm {
+    package tree {
+        +class asm.tree.ClassNode {
+        }
+        +class asm.tree.MethodNode {
+        }
+        +class asm.tree.FieldNode {
+        }
+        +class asm.tree.AbstractInsnNode {
+        }
+        +class asm.tree.FieldInsnNode {
+        }
+        +class asm.tree.MethodInsnNode {
+        }
+
+        asm.tree.MethodInsnNode -u-|> asm.tree.AbstractInsnNode
+        asm.tree.FieldInsnNode -u-|> asm.tree.AbstractInsnNode
+        asm.tree.ClassNode -d-> "*" asm.tree.FieldNode
+        asm.tree.ClassNode -d-> "*" asm.tree.MethodNode
+        asm.tree.MethodNode -d-> "*" asm.tree.AbstractInsnNode
+    }
+}
+
+ClassNodeASM --> asm.tree.ClassNode
+FieldNodeASM --> asm.tree.FieldNode
+MethodNodeASM --> asm.tree.MethodNode
+InstructionNodeASM --> asm.tree.AbstractInsnNode
+MethodInstructionNodeASM --> asm.tree.MethodInsnNode
+FieldInstructionNodeASM --> asm.tree.FieldInsnNode
 @enduml
