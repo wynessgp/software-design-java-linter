@@ -137,3 +137,18 @@
       - Code cleanup (unused vars)
       - Code to UML
       - UML to code
+
+## 11/6 10am-12pm
+### Plan:
+- Finish design
+- Add configuration instructions to README
+
+### Progress:
+- Wrote configuration instructions
+  - Provide directory by command line argument or in command line interface
+  - Add example test files to implementation branch
+- Update design
+  - Recursive file loader
+  - Ensure the design works
+  - Begin adding private methods and fields to individual checks
+- Starting implementation on Wednesday
