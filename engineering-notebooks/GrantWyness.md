@@ -120,4 +120,15 @@
     - If those two do not exist, then a decorator pattern can't possibly exist
     - If they do, then we print out the classes that have "potentially been identified" as part of the pattern
 
+## 11/6 10am-12pm
+### Plan:
+- Write configuration details
+- Work towards finalizing design
+
+### Progress:
+- Configuration details now written on [README](/README.md)
+- Design is as finalized as can be without beginning implementation
+    - Plan is to update individual checks with private fields/methods as we go
+    - Test classes will also be moved as we go
+
 
