@@ -109,3 +109,15 @@
     - Otherwise, we won't be able to do checks if classes are not passed in appropriate order
 - Hollywood Pattern still proving a little elusive (although other algos have stolen my time for the most part)
 
+## 11/5 1pm-3pm
+### Plan:
+- Get my "graph" traversals for decorator pattern working
+    - i.e. Cases where the classes are passed in but not in ideal order
+
+### Progress:
+- Decorator pattern check now works independently of order classes are passed in
+- Makes check for abstract component and abstract decorator
+    - If those two do not exist, then a decorator pattern can't possibly exist
+    - If they do, then we print out the classes that have "potentially been identified" as part of the pattern
+
+
