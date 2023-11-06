@@ -98,6 +98,7 @@ package domain {
 
     +class ClassNodeASM {
         -classNode: ClassNode
+        +ClassNodeASM(cn: ClassNode)
         +getFields(): List<FieldNode>
         +getMethods(): List<MethodNode>
         +getInterfaces(): List<String>
@@ -106,6 +107,7 @@ package domain {
     }
     +class MethodNodeASM {
         -methodNode: MethodNode
+        +MethodNodeASM(mn: MethodNode)
         +getAccess(): String
         +getDesc(): String
         +getMethodName(): String
@@ -115,6 +117,7 @@ package domain {
     }
     +class FieldNodeASM {
         -fieldNode: FieldNode
+        +FieldNodeASM(fn: FieldNode)
         +getAccess(): String
         +getDesc(): String
         +getFieldName(): String
@@ -123,6 +126,7 @@ package domain {
     }
     +class InstructionNodeASM {
         -instructionNode: AbstractInsnNode
+        +InstructionNodeASM(in: AbstractInsnNode)
         +matchesInstructionType(type: String): boolean
         +getOpcode(): int
         +getNextInstruction(): InstructionNode
@@ -130,6 +134,7 @@ package domain {
     }
     +class MethodInstructionNodeASM {
         -methodInsnNode: MethodInsnNode
+        +MethodInstructionNodeASM(min: MethodInsnNode)
         +matchesInstructionType(type: String): boolean
         +getOpcode(): int
         +getNextInstruction(): InstructionNode
@@ -140,6 +145,7 @@ package domain {
     }
     +class FieldInstructionNodeASM {
         -fieldInsnNode: FieldInsnNode
+        +FieldInstructionNodeASM(fin: FieldInsnNode)
         +matchesInstructionType(type: String): boolean
         +getOpcode(): int
         +getNextInstruction(): InstructionNode
@@ -156,57 +162,61 @@ package domain {
     MethodInstructionNodeASM .u.|> MethodInstructionNode
     FieldInstructionNodeASM .u.|> FieldInstructionNode
 
-    +abstract class CheckStrategy {
-        #parsers: List<ParseOption>
-        +{abstract} performCheck(classes: List<String>)
-        +{abstract} handleResults(preferences: Properties)
+    +interface CheckStrategy {
+        +performCheck(classes: List<String>): void
+        +handleResults(preferences: Properties): List<String>
     }
-    +class StaticMethodCheck {
-        +performCheck(classes: List<String>)
-        +handleResults(preferences: Properties)
+    +class StaticMethodCheck implements CheckStrategy {
+        +performCheck(classes: List<String>): void
+        +handleResults(preferences: Properties): List<String>
     }
-    +class FormattingCheck {
-        +performCheck(classes: List<String>)
-        +handleResults(preferences: Properties)
+    +class FormattingCheck implements CheckStrategy {
+        +performCheck(classes: List<String>): void
+        +handleResults(preferences: Properties): List<String>
     }
-    +class UnusedItemsCheck {
-        +performCheck(classes: List<String>)
-        +handleResults(preferences: Properties)
+    +class UnusedItemsCheck implements CheckStrategy {
+        +performCheck(classes: List<String>): void
+        +handleResults(preferences: Properties): List<String>
     }
-    +class InformationHidingCheck {
-        +performCheck(classes: List<String>)
-        +handleResults(preferences: Properties)
+    +class InformationHidingCheck implements CheckStrategy {
+        +performCheck(classes: List<String>): void
+        +handleResults(preferences: Properties): List<String>
     }
-    +class ThreeLayerCheck {
-        +performCheck(classes: List<String>)
-        +handleResults(preferences: Properties)
+    +class ThreeLayerCheck implements CheckStrategy {
+        +performCheck(classes: List<String>): void
+        +handleResults(preferences: Properties): List<String>
     }
-    +class HollywoodCheck {
-        +performCheck(classes: List<String>)
-        +handleResults(preferences: Properties)
+    +class HollywoodCheck implements CheckStrategy {
+        +performCheck(classes: List<String>): void
+        +handleResults(preferences: Properties): List<String>
     }
-    +class FacadeCheck {
-        +performCheck(classes: List<String>)
-        +handleResults(preferences: Properties)
+    +class FacadeCheck implements CheckStrategy {
+        +performCheck(classes: List<String>): void
+        +handleResults(preferences: Properties): List<String>
     }
-    +class StrategyCheck {
-        +performCheck(classes: List<String>)
-        +handleResults(preferences: Properties)
+    +class StrategyCheck implements CheckStrategy {
+        +performCheck(classes: List<String>): void
+        +handleResults(preferences: Properties): List<String>
     }
-    +class DecoratorCheck {
-        +performCheck(classes: List<String>)
-        +handleResults(preferences: Properties)
+    +class DecoratorCheck implements CheckStrategy {
+        -abstractDecorators: Set<String>
+        -concreteDecorators: Set<String>
+        -abstractComponents: Set<String>
+        -concreteComponents: Set<String>
+        -outsideClasses: Set<String>
+        -interfaceNameToUnconfirmedConcreteComponents: Map<String, Set<String>>
+        -interfaceNameToUnconfirmedAbstractDecorators: Map<String, Set<String>>
+        -abstractDecoNameToUnconfirmedConcreteDecorators: Map<String, Set<String>>
+        +performCheck(classes: List<String>): void
+        +handleResults(preferences: Properties): List<String>
+        -singleClassCheck(class: String): void
+        -abstractComponentCheck(cn: ClassNode): boolean
+        -abstractDecoratorCheck(cn: ClassNode): boolean
+        -concreteComponentCheck(cn: ClassNode): boolean
+        -concreteDecoratorCheck(cn: ClassNode): boolean
     }
 
-    InformationHidingCheck -u-|> CheckStrategy
-    ThreeLayerCheck -u-|> CheckStrategy
-    HollywoodCheck -u-|> CheckStrategy
-    UnusedItemsCheck -u-|> CheckStrategy
-    FormattingCheck -u-|> CheckStrategy
-    StaticMethodCheck -u-|> CheckStrategy
-    FacadeCheck -u-|> CheckStrategy
-    StrategyCheck -u-|> CheckStrategy
-    DecoratorCheck -u-|> CheckStrategy
+    domain.CheckStrategy .l.> domain.ClassNode
 }
 package datasource {
     +interface StandardOutput {
@@ -230,9 +240,15 @@ package datasource {
         +ConsoleInput(fs: FileInputStream)
         {method} // interface methods...
     }
+    +class RecursiveDiver {
+        +RecursiveDiver(dirPath: String)
+        {method} // interface methods
+        -fetchAllClassFiles(): List<String>
+    }
 
     ConsoleInput .u.|> StandardInput
     FileOutput .u.|> StandardOutput
+    RecursiveDiver .u.|> StandardInput
 }
 
 package asm {
@@ -258,10 +274,10 @@ package asm {
     }
 }
 
-ClassNodeASM --> asm.tree.ClassNode
-FieldNodeASM --> asm.tree.FieldNode
-MethodNodeASM --> asm.tree.MethodNode
-InstructionNodeASM --> asm.tree.AbstractInsnNode
-MethodInstructionNodeASM --> asm.tree.MethodInsnNode
-FieldInstructionNodeASM --> asm.tree.FieldInsnNode
+domain.ClassNodeASM --> asm.tree.ClassNode
+domain.FieldNodeASM --> asm.tree.FieldNode
+domain.MethodNodeASM --> asm.tree.MethodNode
+domain.InstructionNodeASM --> asm.tree.AbstractInsnNode
+domain.MethodInstructionNodeASM --> asm.tree.MethodInsnNode
+domain.FieldInstructionNodeASM --> asm.tree.FieldInsnNode
 @enduml
