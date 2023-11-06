@@ -99,3 +99,56 @@
 - Update design based on what is needed for algorithms
   - Pattern to abstract linter checks, parsing types
   - Continue design work during next meeting
+
+## 11/2 10am-12pm
+### Plan:
+- Finalize design
+
+### Progress:
+- Redefine static check
+  - Should not define instance of an object that only has public static methods
+  - Create algorithm by Monday
+- Continue work on design
+  - Create bytecode abstraction tree
+  - Separate console and file writing
+  - Need to work on presentation layer
+
+## 11/4 8:30-10pm
+### Plan:
+- Finish new static check algorithm
+- Work on presentation layer of design
+
+### Progress:
+- Added static check algorithm to example code
+  - Additional modifiers check with Opcodes.ACC_* + Opcodes.ACC_*
+  - Ignore initialization methods (\<init>, \<clinit>)
+  - Remove non-static classes from list of visited classes
+  - Recurse through field declarations
+  - If a declaration is from a "static" class, flag it
+- Updated presentation layer
+  - Abstract UI and input class structure
+  - User input performs the following functions:
+    - Get working directory
+      - Future: parse directory in domain layer
+    - Ask to enable/disable checks
+    - Display results
+    - Ask to save results
+    - Ask to perform additional features
+      - Code cleanup (unused vars)
+      - Code to UML
+      - UML to code
+
+## 11/6 10am-12pm
+### Plan:
+- Finish design
+- Add configuration instructions to README
+
+### Progress:
+- Wrote configuration instructions
+  - Provide directory by command line argument or in command line interface
+  - Add example test files to implementation branch
+- Update design
+  - Recursive file loader
+  - Ensure the design works
+  - Begin adding private methods and fields to individual checks
+- Starting implementation on Wednesday
