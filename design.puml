@@ -1,7 +1,6 @@
 @startuml
 package presentation {
     +class Main {
-        -userInterface: UserInterface
         +{static} main(args: String[]): void
     }
     +interface UserInterface {
@@ -24,7 +23,7 @@ package presentation {
         -promptForSavingResults(): void
         -saveResults(): void
         -promptForCodeCleanup(): void
-        -promptForUMLGeneration(): void
+        -promptForUmlGeneration(): void
         -promptForSkeletonCodeGeneration(): void
     }
     +class ConsoleScanner implements UserInput {
@@ -32,7 +31,7 @@ package presentation {
         +getNextLine(): String
     }
 
-    Main -> UserInterface
+    Main .> UserInterface
     ConsoleUserInterface -> UserInput
 }
 ConsoleUserInterface -> "*" domain.CheckStrategy
@@ -69,32 +68,22 @@ package domain {
         +getPreviousInstruction(): InstructionNode
     }
     +interface MethodInstructionNode {
-        +matchesInstructionType(type: String): boolean
-        +getOpcode(): int
-        +getNextInstruction(): InstructionNode
-        +getPreviousInstruction(): InstructionNode
         +getMethodName(): String
         +getMethodOwner(): String
-        +getMethodDescription(): String
+        +getMethodDesc(): String
     }
     +interface FieldInstructionNode {
-        +matchesInstructionType(type: String): boolean
-        +getOpcode(): int
-        +getNextInstruction(): InstructionNode
-        +getPreviousInstruction(): InstructionNode
         +getFieldName(): String
         +getFieldOwner(): String
-        +getFieldDescription(): String
+        +getFieldDesc(): String
     }
 
     MethodInstructionNode -u-|> InstructionNode
     FieldInstructionNode -u-|> InstructionNode
     ClassNode .d.> FieldNode
     ClassNode .d.> MethodNode
-    MethodInstructionNode .d.> InstructionNode
     InstructionNode ..> InstructionNode
     MethodNode .d.> InstructionNode
-    FieldInstructionNode .u.> InstructionNode
 
     +class ClassNodeASM {
         -classNode: ClassNode
@@ -133,7 +122,7 @@ package domain {
         +getPreviousInstruction(): InstructionNode
     }
     +class MethodInstructionNodeASM {
-        -methodInsnNode: MethodInsnNode
+        -instructionNode: MethodInsnNode
         +MethodInstructionNodeASM(min: MethodInsnNode)
         +matchesInstructionType(type: String): boolean
         +getOpcode(): int
@@ -144,7 +133,7 @@ package domain {
         +getMethodDescription(): String
     }
     +class FieldInstructionNodeASM {
-        -fieldInsnNode: FieldInsnNode
+        -instructionNode: FieldInsnNode
         +FieldInstructionNodeASM(fin: FieldInsnNode)
         +matchesInstructionType(type: String): boolean
         +getOpcode(): int
