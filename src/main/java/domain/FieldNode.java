@@ -1,7 +1,7 @@
 package domain;
 
 public interface FieldNode {
-    public String getAccess();
+    public boolean matchesAccess(String access);
     public String getDesc();
     public String getFieldName();
     public Object getFieldValue();

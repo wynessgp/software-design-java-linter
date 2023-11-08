@@ -3,7 +3,7 @@ package domain;
 import java.util.Map;
 
 public interface MethodNode {
-    public String getAccess();
+    public boolean matchesAccess(String access);
     public String getDesc();
     public String getMethodName();
     public InstructionNode getInstructions();

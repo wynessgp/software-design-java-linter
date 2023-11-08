@@ -5,11 +5,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class ConsoleInput implements StandardInput {
-    private String filepath;
     private Scanner scan;
 
     public ConsoleInput(String filepath) {
-        this.filepath = filepath;
         try {
             this.scan = new Scanner(new File(filepath));
         } catch (FileNotFoundException e) {

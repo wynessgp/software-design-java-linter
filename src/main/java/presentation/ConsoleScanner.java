@@ -5,10 +5,13 @@ import java.util.Scanner;
 public class ConsoleScanner implements UserInput {
     private Scanner scanner;
 
+    public ConsoleScanner() {
+        this.scanner = new Scanner(System.in);
+    }
+
     @Override
     public String getNextLine() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNextLine'");
+        return scanner.nextLine();
     }
 
 }

@@ -10,11 +10,13 @@ package presentation {
         +getNextLine(): String
     }
     +class ConsoleUserInterface implements UserInterface {
+        -args: String[]
         -userInput: UserInput
         -projectDirectory: File
         -checksToRun: List<CheckStrategy>
         -reader: StandardInput
         -writer: StandardOutput
+        +ConsoleUserInterface(args: String[])
         +display(): void
         -promptForWorkingDirectory(): void
         -displayDetectedFiles(): void
@@ -47,14 +49,14 @@ package domain {
         +getClassName(): String
     }
     +interface FieldNode {
-        +getAccess(): String
+        +matchesAccess(access: String): boolean
         +getDesc(): String
         +getFieldName(): String
         +getFieldValue(): Object
         +getFieldType(): String
     }
     +interface MethodNode {
-        +getAccess(): String
+        +matchesAccess(access: String): boolean
         +getDesc(): String
         +getMethodName(): String
         +getInstructions(): InstructionNode
@@ -97,7 +99,7 @@ package domain {
     +class MethodNodeASM {
         -methodNode: MethodNode
         +MethodNodeASM(mn: MethodNode)
-        +getAccess(): String
+        +matchesAccess(access: String): boolean
         +getDesc(): String
         +getMethodName(): String
         +getInstructions(): InstructionNode
@@ -107,7 +109,7 @@ package domain {
     +class FieldNodeASM {
         -fieldNode: FieldNode
         +FieldNodeASM(fn: FieldNode)
-        +getAccess(): String
+        +matchesAccess(access: String): boolean
         +getDesc(): String
         +getFieldName(): String
         +getFieldValue(): Object
@@ -214,7 +216,7 @@ package datasource {
     +class FileOutput {
         -filepath: String
         -bufferedWriter: BufferedWriter
-        +ConsoleOutput(fp: String)
+        +FileOutput(fp: String)
         {method} // interface methods...
     }
     +interface StandardInput {

@@ -6,6 +6,10 @@ import java.io.FileNotFoundException;
 
 public class RecursiveDiver implements StandardInput {
 
+	public RecursiveDiver(File path) {
+		
+	}
+
 	@Override
 	public String nextLine() {
 		// TODO Auto-generated method stub
