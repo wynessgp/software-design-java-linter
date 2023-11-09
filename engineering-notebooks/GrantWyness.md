@@ -131,4 +131,19 @@
     - Plan is to update individual checks with private fields/methods as we go
     - Test classes will also be moved as we go
 
+## 11/8 10am-12pm
+### Plan:
+- Setup the skeleton for our classes
+- Begin adding fields as necessary to have code work
+
+### Progress:
+- Skeleton setup for classes
+- Some implementation of presentation and datasource layers done
+    - Need to have recursive file diver set up for JUnit tests (if needed)
+- Continue implementation into Thursday & the weekend
+
+## 11/9 10am-12pm
+### Plan:
+- Do some work on implementation with new design
+- Defer some work to weekend
 
