@@ -59,7 +59,7 @@ package domain {
         +matchesAccess(access: String): boolean
         +getDesc(): String
         +getMethodName(): String
-        +getInstructions(): InstructionNode
+        +getInstructions(): List<InstructionNode>
         +getReturnType(): String
         +getArgs(): Map<String, String>
     }
@@ -102,7 +102,7 @@ package domain {
         +matchesAccess(access: String): boolean
         +getDesc(): String
         +getMethodName(): String
-        +getInstructions(): InstructionNode
+        +getInstructions(): List<InstructionNode>
         +getReturnType(): String
         +getArgs(): Map<String, String>
     }
@@ -152,6 +152,7 @@ package domain {
     InstructionNodeASM .u.|> InstructionNode
     MethodInstructionNodeASM .u.|> MethodInstructionNode
     FieldInstructionNodeASM .u.|> FieldInstructionNode
+    MethodNodeASM .l.> InstructionNode
 
     +interface CheckStrategy {
         +performCheck(classes: List<String>): void
@@ -225,19 +226,13 @@ package datasource {
         +nextInt(): int
         +next(): String
     }
-    +class ConsoleInput {
-        -scan: Scanner
-        -fileStream: FileInputStream
-        +ConsoleInput(fs: FileInputStream)
-        {method} // interface methods...
-    }
+
     +class RecursiveDiver {
         +RecursiveDiver(dirPath: String)
         {method} // interface methods
         -fetchAllClassFiles(): List<String>
     }
 
-    ConsoleInput .u.|> StandardInput
     FileOutput .u.|> StandardOutput
     RecursiveDiver .u.|> StandardInput
 }

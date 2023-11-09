@@ -1,6 +1,7 @@
 package domain;
 
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 public class FieldNodeASM implements FieldNode {
     private org.objectweb.asm.tree.FieldNode fieldNode;
@@ -39,26 +40,22 @@ public class FieldNodeASM implements FieldNode {
 
     @Override
     public String getDesc() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDesc'");
+        return this.fieldNode.desc.replace("/", ".");
     }
 
     @Override
     public String getFieldName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFieldName'");
+        return this.fieldNode.name.replace("/", ".");
     }
 
     @Override
     public Object getFieldValue() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFieldValue'");
+        return this.fieldNode.value;
     }
 
     @Override
     public String getFieldType() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFieldType'");
+        return Type.getObjectType(this.fieldNode.desc).getClassName();
     }
 
 }
