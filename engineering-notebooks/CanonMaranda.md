@@ -152,3 +152,14 @@
   - Ensure the design works
   - Begin adding private methods and fields to individual checks
 - Starting implementation on Wednesday
+
+## 11/8 10am-12pm
+### Plan:
+- Begin implementation
+
+### Progress:
+- Designed skeleton classes
+  - Updated UML to reflect changes made
+- Began functionality for ASM adapters and presentation layer
+  - Changed getAccess() to a method that checks for a list of access modifiers
+    - Plan to abstract it out
