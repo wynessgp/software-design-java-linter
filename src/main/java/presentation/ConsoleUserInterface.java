@@ -58,8 +58,9 @@ public class ConsoleUserInterface implements UserInterface {
         StringBuilder sb = new StringBuilder("Found: ");
         this.reader = new RecursiveDiver(projectDirectory);
         while (reader.hasNext()) {
-            classPaths.add(reader.nextLine());
-            sb.append(reader.nextLine() + " ");
+            String next = reader.next();
+            classPaths.add(next);
+            sb.append(next + " ");
         }
         if (classPaths.size() > 0) {
             System.out.println(sb);
