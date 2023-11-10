@@ -163,3 +163,14 @@
 - Began functionality for ASM adapters and presentation layer
   - Changed getAccess() to a method that checks for a list of access modifiers
     - Plan to abstract it out
+
+## 11/10 10-11am
+### Plan:
+- Begin work on recursive file search
+
+### Progress:
+- Implemented findClassFiles() in RecursiveDiver
+  - Looks for all .class files in directory and adds paths to a set
+  - To be parsed in ASM ClassReader
+- Plan for ClassReader interface and adapter
+  - Used to parse .class files, check for existance
