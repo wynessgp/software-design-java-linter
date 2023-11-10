@@ -41,6 +41,9 @@ ConsoleUserInterface -> "*" datasource.StandardInput
 ConsoleUserInterface -> "*" datasource.StandardOutput
 
 package domain {
+    +interface ClassReader {
+
+    }
     +interface ClassNode {
         +getFields(): List<FieldNode>
         +getMethods(): List<MethodNode>
@@ -87,6 +90,9 @@ package domain {
     InstructionNode ..> InstructionNode
     MethodNode .d.> InstructionNode
 
+    +class ClassReaderASM {
+
+    }
     +class ClassNodeASM {
         -classNode: ClassNode
         +ClassNodeASM(cn: ClassNode)
@@ -146,6 +152,7 @@ package domain {
         +getFieldDescription(): String
     }
 
+    ClassReaderASM .u.|> ClassReader
     ClassNodeASM .u.|> ClassNode
     MethodNodeASM .u.|> MethodNode
     FieldNodeASM .u.|> FieldNode
@@ -228,9 +235,10 @@ package datasource {
     }
 
     +class RecursiveDiver {
-        +RecursiveDiver(dirPath: String)
+        -iter: Iterator<String>
+        +RecursiveDiver(path: File)
+        -findClassFiles(path: File): Set<String>
         {method} // interface methods
-        -fetchAllClassFiles(): List<String>
     }
 
     FileOutput .u.|> StandardOutput
