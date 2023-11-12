@@ -147,3 +147,25 @@
 - Do some work on implementation with new design
 - Defer some work to weekend
 
+### Progress:
+- Some implementation for the important skeleton ASM classes
+- Some more design work done to fix issues that we found.
+
+## 11/11 6:30pm-10pm 
+### Plan:
+- Get the remaining skeleton classes implemented (within reason)
+- Refactor Decorator pattern, the only fully moved one in the project so far
+- Do some research on A level feature
+- Side note: work logs from here on out will be on Central Time (I live in NW Indiana, and have gone home for the quarter)
+
+### Progress:
+- Remaining skeleton classes have implementation done
+- Decorator pattern is fully integrated with adapter pattern for ASM
+    - Still need to decide what we will do with ASM's types.
+- Discovered how to actually delete methods and fields, but local variables will have to remain
+    - Nasty bug with looping variables being declared as unused
+    - Can't get rid of looping variables without knowing scope of the loop, which is hard
+- Looking to do more work tonight, but it may carry over into Sunday (11/12), so this is the commit.
+
+
+
