@@ -35,6 +35,7 @@ package presentation {
 
     Main .> UserInterface
     ConsoleUserInterface -> UserInput
+    ConsoleUserInterface .> CheckStrategy
 }
 ConsoleUserInterface -> domain.LintRunner
 ConsoleUserInterface -d-> "*" datasource.StandardInput
@@ -42,12 +43,15 @@ ConsoleUserInterface -d-> "*" datasource.StandardOutput
 
 package domain {
     +class LintRunner {
+        -{static} checkTypes: CheckStrategy[]
         -checks: List<CheckStrategy>
         -readers: List<ClassReader>
-        +LintRunner(classNames: List<String>)
-        -createClassReaders(): void
+        +LintRunner()
+        +createClassReaders(classNames: List<String>): List<String>
         +addCheck(check: CheckStrategy): void
         +runChecks(): Map<String, List<String>>
+        +getCheckTypes(): Map<String, Object>
+        +isChecksEmpty(): boolean
     }
     LintRunner -d-> "*" CheckStrategy
     LintRunner -> "*" ClassReader
@@ -249,7 +253,6 @@ package datasource {
         +write(): void
     }
     +class FileOutput {
-        -filepath: String
         -bufferedWriter: BufferedWriter
         +FileOutput(fp: String)
         {method} // interface methods...
