@@ -5,11 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileOutput implements StandardOutput {
-    private String filepath;
     private BufferedWriter bufferedWriter;
 
     public FileOutput(String fp) {
-        this.filepath = fp;
         try {
             this.bufferedWriter = new BufferedWriter(new FileWriter(fp));
         } catch (IOException e) {

@@ -13,5 +13,4 @@ public class ConsoleScanner implements UserInput {
     public String getNextLine() {
         return scanner.nextLine();
     }
-
 }

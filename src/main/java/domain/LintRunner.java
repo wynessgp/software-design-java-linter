@@ -6,22 +6,28 @@ import java.util.List;
 import java.util.Map;
 
 public class LintRunner {
+    private static CheckStrategy[] checkTypes = new CheckStrategy[] { new StaticMethodCheck(), new FormattingCheck(),
+            new UnusedItemsCheck(), new InformationHidingCheck(), new ThreeLayerCheck(), new HollywoodCheck(),
+            new FacadeCheck(), new StrategyCheck(), new DecoratorCheck() };
     private List<CheckStrategy> strategies;
     private List<ClassReader> readers;
 
-    public LintRunner(List<String> classNames) {
+    public LintRunner() {
         this.strategies = new ArrayList<>();
         this.readers = new ArrayList<>();
-        createClassReaders(classNames);
     }
 
-    private void createClassReaders(List<String> classNames) {
+    public List<String> createClassReaders(List<String> classNames) {
+        List<String> classPaths = new ArrayList<>();
         for (String className : classNames) {
             ClassReader classReader = new ClassReaderASM();
             if (classReader.acceptClass(className)) {
                 readers.add(classReader);
+                classPaths.add(className.substring(className
+                        .lastIndexOf(className.contains("\\") ? '\\' : '/') + 1));
             }
         }
+        return classPaths;
     }
 
     public void addCheck(CheckStrategy check) {
@@ -37,5 +43,21 @@ public class LintRunner {
             results.put(check.getCheckName(), check.handleResults());
         }
         return results;
+    }
+
+    public Map<String, Object> getCheckTypes() {
+        Map<String, Object> types = new HashMap<>();
+        for (CheckStrategy checkType : checkTypes) {
+            try {
+                types.put(checkType.getCheckName(), checkType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return types;
+    }
+
+    public boolean isChecksEmpty() {
+        return strategies.isEmpty();
     }
 }
