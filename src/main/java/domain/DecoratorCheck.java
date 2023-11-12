@@ -15,6 +15,7 @@ public class DecoratorCheck implements CheckStrategy {
     // 1. Has an interface as a field
     // 2. Implements the interface
     private Set<String> abstractDecorators;
+
     // Anything that extends at least one abstract decorator
     private Set<String> concreteDecorators;
 
@@ -23,9 +24,22 @@ public class DecoratorCheck implements CheckStrategy {
     // these will implement the interface, but not have the interface as a field.
     private Set<String> concreteComponents;
 
-    // DONE: Graph traversal stuff
+    // Graph traversal stuff
+    // First map: "This is a concrete class, and it implements an interface. However,
+    //             I haven't yet seen if the interface is actually an abstract
+    //             component, so I'll hold off until the interface confirms me,
+    //             if it appears."
     private Map<String, Set<String>> interfaceNameToUnconfirmedConcreteComponents;
+
+    // Second map: "This is an abstract class, and it both implements and has a field
+    //              of the interface's type, but we haven't yet seen that interface as
+    //              an actual abstract component, so I'll hold off until the interface
+    //              confirms me, if it appears."
     private Map<String, Set<String>> interfaceNameToUnconfirmedAbstractDecorators;
+
+    // Third map: "This is a concrete class, and it extends another class. However, 
+    //             I haven't yet seen the class it extends, so I'll hold off until
+    //             the abstract decorator confirms me, if it appears."
     private Map<String, Set<String>> abstractDecoNameToUnconfirmedConcreteDecorators;
 
     private Set<String> outsideClasses;
@@ -58,7 +72,7 @@ public class DecoratorCheck implements CheckStrategy {
         List<String> ret = new ArrayList<>();
         // should be at least one of both in any pattern.
         // This is the core of the "is-a", "has-a" that decorators must have.
-        if (this.abstractDecorators.isEmpty() && this.concreteComponents.isEmpty()) {
+        if (this.abstractDecorators.isEmpty() && this.abstractComponents.isEmpty()) {
             ret.add("\nNo strict decorator pattern found! Check to make sure you have: \n");
             ret.add("\t\t1. An abstract component (an interface)\n");
             ret.add("\t\t2. An abstract decorator (an abstract class that <implements> the abstract component)\n");
@@ -146,13 +160,9 @@ public class DecoratorCheck implements CheckStrategy {
         if (cn.getInterfaces().isEmpty())
             return false;
 
-        // get dotted interface names, to be consistent
-        List<String> dottedInterfaceNames = new ArrayList<>();
-        for (String s : cn.getInterfaces())
-            dottedInterfaceNames.add(s.replace("/", "."));
-
         // start check 2. Does it have a field that is one of the many interfaces it may
         // implement?
+        List<String> dottedInterfaceNames = cn.getInterfaces();
         String dottedClassName = cn.getClassName();
         for (FieldNode fn : cn.getFields()) {
             String userFriendlyType = Type.getObjectType(fn.getDesc()).getClassName();
@@ -193,7 +203,7 @@ public class DecoratorCheck implements CheckStrategy {
         // make sure it's not an interface, or an abstract class
         if (cn.matchesAccess("interface"))
             return false;
-        if (cn.matchesAccess("interface"))
+        if (cn.matchesAccess("abstract"))
             return false;
         // ok, it's not an interface or an abstract class. Now, see if it works with an
         // abstract component.
@@ -204,8 +214,7 @@ public class DecoratorCheck implements CheckStrategy {
         String dottedName = cn.getClassName();
 
         for (String interfaceName : cn.getInterfaces()) {
-            String dottedInterName = interfaceName.replace("/", ".");
-            if (abstractComponents.contains(dottedInterName)) {
+            if (abstractComponents.contains(interfaceName)) {
                 // we've found a confirmed abstractComponent that we implement.
                 concreteComponents.add(dottedName);
                 // we can prematurely end here since it's confirmed.
@@ -215,12 +224,12 @@ public class DecoratorCheck implements CheckStrategy {
                 // so we need to mark ourselves for each and every one
                 // sure, it's a bit inefficient, but the graph traversal respects that we'll
                 // only mark for the correct interface.
-                if (!interfaceNameToUnconfirmedConcreteComponents.containsKey(dottedInterName)) {
+                if (!interfaceNameToUnconfirmedConcreteComponents.containsKey(interfaceName)) {
                     Set<String> concretes = new HashSet<>();
                     concretes.add(dottedName);
-                    interfaceNameToUnconfirmedConcreteComponents.put(dottedInterName, concretes);
+                    interfaceNameToUnconfirmedConcreteComponents.put(interfaceName, concretes);
                 } else {
-                    interfaceNameToUnconfirmedConcreteComponents.get(dottedInterName).add(dottedName);
+                    interfaceNameToUnconfirmedConcreteComponents.get(interfaceName).add(dottedName);
                 }
             }
         }
