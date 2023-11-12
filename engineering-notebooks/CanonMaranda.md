@@ -186,3 +186,13 @@
   - Handles finding the right .class file, creating ClassNode object
 - Program can successfully process .class files from a directory
   - Uses InputStream method rather than class names for ClassReader
+
+## 11/12 2:30-3:30pm
+### Plan:
+- Prepare UI for running checks
+
+### Progress:
+- Implemented check options dialog
+  - User is prompted for each check, asking if they would like to run it
+  - Uses a list of Class\<?> objects, not sure how to improve flexibilty for this functionality
+  - Ready to run selected checks once user presses the enter key
