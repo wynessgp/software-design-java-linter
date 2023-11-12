@@ -36,13 +36,25 @@ package presentation {
     Main .> UserInterface
     ConsoleUserInterface -> UserInput
 }
-ConsoleUserInterface -> "*" domain.CheckStrategy
-ConsoleUserInterface -> "*" datasource.StandardInput
-ConsoleUserInterface -> "*" datasource.StandardOutput
+ConsoleUserInterface -> "*" domain.LintRunner
+ConsoleUserInterface -d-> "*" datasource.StandardInput
+ConsoleUserInterface -d-> "*" datasource.StandardOutput
 
 package domain {
-    +interface ClassReader {
+    +class LintRunner {
+        -checks: List<CheckStrategy>
+        -readers: List<ClassReader>
+        +LintRunner(classNames: List<String>)
+        +createClassReaders(): void
+        +addCheck(check: CheckStrategy): void
+        +runChecks(): Map<String, List<String>>
+    }
+    LintRunner -d-> "*" CheckStrategy
+    LintRunner -> "*" ClassReader
 
+    +interface ClassReader {
+        +acceptClass(className: String): boolean
+        +getClassNode(): ClassNode
     }
     +interface ClassNode {
         +matchesAccess(access: String): boolean
@@ -92,7 +104,10 @@ package domain {
     MethodNode .d.> InstructionNode
 
     +class ClassReaderASM {
-
+        -classReader: ClassReader
+        -classNode: ClassNode
+        +acceptClass(className: String): boolean
+        +getClassNode(): ClassNode
     }
     +class ClassNodeASM {
         -classNode: ClassNode
@@ -162,41 +177,42 @@ package domain {
     MethodInstructionNodeASM .u.|> MethodInstructionNode
     FieldInstructionNodeASM .u.|> FieldInstructionNode
     MethodNodeASM .l.> InstructionNode
+    ClassReaderASM -> ClassNode
 
     +interface CheckStrategy {
-        +performCheck(classes: List<String>): void
+        +performCheck(classes: List<ClassNode>): void
         +handleResults(preferences: Properties): List<String>
     }
     +class StaticMethodCheck implements CheckStrategy {
-        +performCheck(classes: List<String>): void
+        +performCheck(classes: List<ClassNode>): void
         +handleResults(preferences: Properties): List<String>
     }
     +class FormattingCheck implements CheckStrategy {
-        +performCheck(classes: List<String>): void
+        +performCheck(classes: List<ClassNode>): void
         +handleResults(preferences: Properties): List<String>
     }
     +class UnusedItemsCheck implements CheckStrategy {
-        +performCheck(classes: List<String>): void
+        +performCheck(classes: List<ClassNode>): void
         +handleResults(preferences: Properties): List<String>
     }
     +class InformationHidingCheck implements CheckStrategy {
-        +performCheck(classes: List<String>): void
+        +performCheck(classes: List<ClassNode>): void
         +handleResults(preferences: Properties): List<String>
     }
     +class ThreeLayerCheck implements CheckStrategy {
-        +performCheck(classes: List<String>): void
+        +performCheck(classes: List<ClassNode>): void
         +handleResults(preferences: Properties): List<String>
     }
     +class HollywoodCheck implements CheckStrategy {
-        +performCheck(classes: List<String>): void
+        +performCheck(classes: List<ClassNode>): void
         +handleResults(preferences: Properties): List<String>
     }
     +class FacadeCheck implements CheckStrategy {
-        +performCheck(classes: List<String>): void
+        +performCheck(classes: List<ClassNode>): void
         +handleResults(preferences: Properties): List<String>
     }
     +class StrategyCheck implements CheckStrategy {
-        +performCheck(classes: List<String>): void
+        +performCheck(classes: List<ClassNode>): void
         +handleResults(preferences: Properties): List<String>
     }
     +class DecoratorCheck implements CheckStrategy {
@@ -208,7 +224,7 @@ package domain {
         -interfaceNameToUnconfirmedConcreteComponents: Map<String, Set<String>>
         -interfaceNameToUnconfirmedAbstractDecorators: Map<String, Set<String>>
         -abstractDecoNameToUnconfirmedConcreteDecorators: Map<String, Set<String>>
-        +performCheck(classes: List<String>): void
+        +performCheck(classes: List<ClassNode>): void
         +handleResults(preferences: Properties): List<String>
         -singleClassCheck(class: String): void
         -abstractComponentCheck(cn: ClassNode): boolean
@@ -216,8 +232,7 @@ package domain {
         -concreteComponentCheck(cn: ClassNode): boolean
         -concreteDecoratorCheck(cn: ClassNode): boolean
     }
-
-    domain.CheckStrategy .l.> domain.ClassNode
+    CheckStrategy .> ClassNode
 }
 package datasource {
     +interface StandardOutput {
@@ -273,6 +288,7 @@ package asm {
 domain.ClassNodeASM --> asm.tree.ClassNode
 domain.FieldNodeASM --> asm.tree.FieldNode
 domain.MethodNodeASM --> asm.tree.MethodNode
+domain.ClassReaderASM -> asm.ClassReader
 domain.InstructionNodeASM --> asm.tree.AbstractInsnNode
 domain.MethodInstructionNodeASM --> asm.tree.MethodInsnNode
 domain.FieldInstructionNodeASM --> asm.tree.FieldInsnNode
