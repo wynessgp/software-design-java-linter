@@ -174,3 +174,15 @@
   - To be parsed in ASM ClassReader
 - Plan for ClassReader interface and adapter
   - Used to parse .class files, check for existance
+
+## 11/11 7:30-10pm
+### Plan:
+- Update design to use facade pattern in domain layer
+  - Handles creating ClassReaders and running checks
+
+### Progress:
+- Created LintRunner class
+- Added functionality to ClassReader abstraction
+  - Handles finding the right .class file, creating ClassNode object
+- Program can successfully process .class files from a directory
+  - Uses InputStream method rather than class names for ClassReader
