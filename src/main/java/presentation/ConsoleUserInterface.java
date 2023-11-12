@@ -2,27 +2,24 @@ package presentation;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import datasource.RecursiveDiver;
 import datasource.StandardInput;
 import datasource.StandardOutput;
-import domain.CheckStrategy;
+import domain.LintRunner;
 
 public class ConsoleUserInterface implements UserInterface {
     private String[] args;
     private UserInput userInput;
     private File projectDirectory;
-    private List<CheckStrategy> checksToRun;
     private StandardInput reader;
     private StandardOutput writer;
+    private LintRunner runner;
 
     public ConsoleUserInterface(String[] args) {
         this.args = args;
         this.userInput = new ConsoleScanner();
-        this.checksToRun = new ArrayList<>();
     }
 
     @Override
@@ -54,7 +51,7 @@ public class ConsoleUserInterface implements UserInterface {
     }
 
     private void displayDetectedFiles() {
-        Set<String> classPaths = new HashSet<>();
+        List<String> classPaths = new ArrayList<>();
         StringBuilder sb = new StringBuilder("Found: ");
         this.reader = new RecursiveDiver(projectDirectory);
         while (reader.hasNext()) {
@@ -68,19 +65,24 @@ public class ConsoleUserInterface implements UserInterface {
             System.out.println("No classes found in " + projectDirectory.toString());
             System.exit(1);
         }
+        this.runner = new LintRunner(classPaths);
         promptForCheckOptions();
     }
 
     private void promptForCheckOptions() {
-
+        runChecks();
     }
-
-    private void displayCheckResults() {
-
+    
+    private void runChecks() {
+        this.runner.runChecks();
+        promptForSavingResults();
+        promptForCodeCleanup();
+        promptForUmlGeneration();
+        promptForSkeletonCodeGeneration();
     }
 
     private void promptForSavingResults() {
-
+        saveResults();
     }
 
     private void saveResults() {

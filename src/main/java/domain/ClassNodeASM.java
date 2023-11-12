@@ -8,8 +8,8 @@ import org.objectweb.asm.Opcodes;
 public class ClassNodeASM implements ClassNode {
     private org.objectweb.asm.tree.ClassNode classNode;
 
-    public ClassNodeASM(org.objectweb.asm.tree.ClassNode classNode) {
-        this.classNode = classNode;
+    public ClassNodeASM() {
+        this.classNode = new org.objectweb.asm.tree.ClassNode();
     }
 
     @Override
@@ -77,4 +77,7 @@ public class ClassNodeASM implements ClassNode {
         return accessLevel == classNode.access;
     }
 
+    public org.objectweb.asm.tree.ClassNode getAsmNode() {
+        return classNode;
+    }
 }

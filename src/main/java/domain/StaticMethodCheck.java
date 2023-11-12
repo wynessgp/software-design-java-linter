@@ -1,19 +1,26 @@
 package domain;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class StaticMethodCheck implements CheckStrategy {
     public StaticMethodCheck() {
 
     }
 
-    public void performCheck(List<String> classNames) {
-
+    @Override
+    public void performCheck(List<ClassNode> classNames) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'performCheck'");
     }
 
-    public List<String> handleResults(Properties preferences) {
-        return new ArrayList<>();
+    @Override
+    public List<String> handleResults() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'handleResults'");
+    }
+
+    @Override
+    public String getCheckName() {
+        return "Static method";
     }
 }

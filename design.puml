@@ -13,15 +13,15 @@ package presentation {
         -args: String[]
         -userInput: UserInput
         -projectDirectory: File
-        -checksToRun: List<CheckStrategy>
         -reader: StandardInput
         -writer: StandardOutput
+        -runner: LintRunner
         +ConsoleUserInterface(args: String[])
         +display(): void
         -promptForWorkingDirectory(): void
         -displayDetectedFiles(): void
         -promptForCheckOptions(): void
-        -displayCheckResults(): void
+        -runChecks(): void
         -promptForSavingResults(): void
         -saveResults(): void
         -promptForCodeCleanup(): void
@@ -36,7 +36,7 @@ package presentation {
     Main .> UserInterface
     ConsoleUserInterface -> UserInput
 }
-ConsoleUserInterface -> "*" domain.LintRunner
+ConsoleUserInterface -> domain.LintRunner
 ConsoleUserInterface -d-> "*" datasource.StandardInput
 ConsoleUserInterface -d-> "*" datasource.StandardOutput
 
@@ -45,7 +45,7 @@ package domain {
         -checks: List<CheckStrategy>
         -readers: List<ClassReader>
         +LintRunner(classNames: List<String>)
-        +createClassReaders(): void
+        -createClassReaders(): void
         +addCheck(check: CheckStrategy): void
         +runChecks(): Map<String, List<String>>
     }
@@ -53,7 +53,7 @@ package domain {
     LintRunner -> "*" ClassReader
 
     +interface ClassReader {
-        +acceptClass(className: String): boolean
+        +acceptClass(classPath: String): boolean
         +getClassNode(): ClassNode
     }
     +interface ClassNode {
@@ -106,12 +106,12 @@ package domain {
     +class ClassReaderASM {
         -classReader: ClassReader
         -classNode: ClassNode
-        +acceptClass(className: String): boolean
+        +acceptClass(classPath: String): boolean
         +getClassNode(): ClassNode
     }
     +class ClassNodeASM {
         -classNode: ClassNode
-        +ClassNodeASM(cn: ClassNode)
+        +ClassNodeASM()
         +matchesAccess(access: String): boolean
         +getFields(): List<FieldNode>
         +getMethods(): List<MethodNode>
@@ -181,39 +181,48 @@ package domain {
 
     +interface CheckStrategy {
         +performCheck(classes: List<ClassNode>): void
-        +handleResults(preferences: Properties): List<String>
+        +handleResults(): List<String>
+        +getCheckName(): String
     }
     +class StaticMethodCheck implements CheckStrategy {
         +performCheck(classes: List<ClassNode>): void
-        +handleResults(preferences: Properties): List<String>
+        +handleResults(): List<String>
+        +getCheckName(): String
     }
     +class FormattingCheck implements CheckStrategy {
         +performCheck(classes: List<ClassNode>): void
-        +handleResults(preferences: Properties): List<String>
+        +handleResults(): List<String>
+        +getCheckName(): String
     }
     +class UnusedItemsCheck implements CheckStrategy {
         +performCheck(classes: List<ClassNode>): void
-        +handleResults(preferences: Properties): List<String>
+        +handleResults(): List<String>
+        +getCheckName(): String
     }
     +class InformationHidingCheck implements CheckStrategy {
         +performCheck(classes: List<ClassNode>): void
-        +handleResults(preferences: Properties): List<String>
+        +handleResults(): List<String>
+        +getCheckName(): String
     }
     +class ThreeLayerCheck implements CheckStrategy {
         +performCheck(classes: List<ClassNode>): void
-        +handleResults(preferences: Properties): List<String>
+        +handleResults(): List<String>
+        +getCheckName(): String
     }
     +class HollywoodCheck implements CheckStrategy {
         +performCheck(classes: List<ClassNode>): void
-        +handleResults(preferences: Properties): List<String>
+        +handleResults(): List<String>
+        +getCheckName(): String
     }
     +class FacadeCheck implements CheckStrategy {
         +performCheck(classes: List<ClassNode>): void
-        +handleResults(preferences: Properties): List<String>
+        +handleResults(): List<String>
+        +getCheckName(): String
     }
     +class StrategyCheck implements CheckStrategy {
         +performCheck(classes: List<ClassNode>): void
-        +handleResults(preferences: Properties): List<String>
+        +handleResults(): List<String>
+        +getCheckName(): String
     }
     +class DecoratorCheck implements CheckStrategy {
         -abstractDecorators: Set<String>
@@ -225,7 +234,8 @@ package domain {
         -interfaceNameToUnconfirmedAbstractDecorators: Map<String, Set<String>>
         -abstractDecoNameToUnconfirmedConcreteDecorators: Map<String, Set<String>>
         +performCheck(classes: List<ClassNode>): void
-        +handleResults(preferences: Properties): List<String>
+        +handleResults(): List<String>
+        +getCheckName(): String
         -singleClassCheck(class: String): void
         -abstractComponentCheck(cn: ClassNode): boolean
         -abstractDecoratorCheck(cn: ClassNode): boolean
@@ -258,8 +268,13 @@ package datasource {
         {method} // interface methods
     }
 
+    +class FileReader {
+        +FileReader(path: File)
+    }
+
     FileOutput .u.|> StandardOutput
     RecursiveDiver .u.|> StandardInput
+    ClassReaderASM .> FileReader
 }
 
 package asm {

@@ -22,11 +22,7 @@ public class RecursiveDiver implements StandardInput {
 				result.addAll(findClassFiles(f));
 			}
 		} else if (path.getName().endsWith(".class")) {
-			String currentPath = path.getPath()
-					.replace("/", ".")
-					.replace("\\", ".")
-					.replace(".class", "");
-			result.add(currentPath);
+			result.add(path.getPath());
 		}
 		return result;
 	}

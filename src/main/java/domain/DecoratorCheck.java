@@ -1,12 +1,10 @@
 package domain;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.objectweb.asm.ClassReader;
@@ -17,12 +15,8 @@ import org.objectweb.asm.Type;
 
 public class DecoratorCheck implements CheckStrategy {
 
-    public void performCheck(List<String> classNames) {
+    public void performCheck(List<ClassNode> classNames) {
 
-    }
-
-    public List<String> handleResults(Properties preferences) {
-        return new ArrayList<>();
     }
 
     // The abstract decorator should be the one that both:
@@ -63,7 +57,7 @@ public class DecoratorCheck implements CheckStrategy {
         handleResults();
     }
 
-    public void handleResults() {
+    public List<String> handleResults() {
         // should be at least one of both in any pattern.
         // This is the core of the "is-a", "has-a" that decorators must have.
         if (this.abstractDecorators.isEmpty() && this.concreteComponents.isEmpty()) {
@@ -99,11 +93,12 @@ public class DecoratorCheck implements CheckStrategy {
             System.out.println("        " + outsideClasses.toString());
             System.out.println();
         }
+        return null; // FIXME: return list of strings
     }
 
     private void singleClassChecks(String classToCheck) throws IOException {
         ClassReader cr = new ClassReader(classToCheck);
-        ClassNode cn = new ClassNodeASM(new org.objectweb.asm.tree.ClassNode());
+        ClassNode cn = new ClassNodeASM();
         // FIXME: cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
         // first check: is it an interface?
@@ -294,5 +289,10 @@ public class DecoratorCheck implements CheckStrategy {
         // }
 
         return false;
+    }
+
+    @Override
+    public String getCheckName() {
+        return "Decorator";
     }
 }
