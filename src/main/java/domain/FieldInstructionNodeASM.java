@@ -9,6 +9,7 @@ public class FieldInstructionNodeASM implements FieldInstructionNode {
         this.instructionNode = instructionNode;
     }
 
+    // TODO: Enum?
     @Override
     public boolean matchesInstructionType(String type) {
         return type.toLowerCase().equals("field");
@@ -22,20 +23,18 @@ public class FieldInstructionNodeASM implements FieldInstructionNode {
     // TODO: Needed?
     @Override
     public InstructionNode getNextInstruction() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNextInstruction'");
+        return this.instructionNode.getNext() == null ? null 
+                : new InstructionNodeASM(this.instructionNode.getNext());
     }
 
-    // TODO: Needed?
     @Override
     public InstructionNode getPreviousInstruction() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPreviousInstruction'");
+        return this.instructionNode.getPrevious() == null ? null 
+                : new InstructionNodeASM(this.instructionNode.getPrevious());
     }
 
     @Override
     public String getFieldName() {
-        // TODO Auto-generated method stub
         return this.instructionNode.name.replace("/", ".");
     }
 

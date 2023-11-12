@@ -33,6 +33,9 @@ public class FieldNodeASM implements FieldNode {
                 case "abstract":
                     accessLevel += Opcodes.ACC_ABSTRACT;
                     break;
+                case "interface":
+                    accessLevel += Opcodes.ACC_INTERFACE;
+                    break;
             }
         }
         return accessLevel == fieldNode.access;

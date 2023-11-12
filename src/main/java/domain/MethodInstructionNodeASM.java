@@ -9,6 +9,7 @@ public class MethodInstructionNodeASM implements MethodInstructionNode {
         this.instructionNode = instructionNode;
     }
 
+    // TODO: Enum?
     @Override
     public boolean matchesInstructionType(String type) {
         return type.toLowerCase().equals("method");
@@ -19,16 +20,17 @@ public class MethodInstructionNodeASM implements MethodInstructionNode {
         return this.instructionNode.getOpcode();
     }
 
+    // TODO: Evalutate if we need these near end of implementation
     @Override
     public InstructionNode getNextInstruction() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNextInstruction'");
+        return this.instructionNode.getNext() == null ? null 
+                : new InstructionNodeASM(this.instructionNode.getNext());
     }
 
     @Override
     public InstructionNode getPreviousInstruction() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPreviousInstruction'");
+        return this.instructionNode.getPrevious() == null ? null
+                : new InstructionNodeASM(this.instructionNode.getPrevious());
     }
 
     @Override
@@ -45,5 +47,5 @@ public class MethodInstructionNodeASM implements MethodInstructionNode {
     public String getMethodDesc() {
         return this.instructionNode.desc.replace("/", ".");
     }
-    
+
 }

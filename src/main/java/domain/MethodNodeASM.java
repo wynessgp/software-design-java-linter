@@ -38,6 +38,9 @@ public class MethodNodeASM implements MethodNode {
                 case "abstract":
                     accessLevel += Opcodes.ACC_ABSTRACT;
                     break;
+                case "interface":
+                    accessLevel += Opcodes.ACC_INTERFACE;
+                    break;
             }
         }
         return accessLevel == methodNode.access;

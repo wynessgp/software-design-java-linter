@@ -2,9 +2,7 @@ package domain;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
 
-// TODO: Is this class needed?
-// We already sneak around abstraction with field and method instruction nodes.
-
+// TODO: See if needed towards end of the project
 public class InstructionNodeASM implements InstructionNode {
     private AbstractInsnNode instructionNode;
 
@@ -12,6 +10,7 @@ public class InstructionNodeASM implements InstructionNode {
         this.instructionNode = instructionNode;
     }
 
+    // TODO: Make type an Enum for stuff like this
     @Override
     public boolean matchesInstructionType(String type) {
         // TODO Auto-generated method stub
@@ -20,20 +19,19 @@ public class InstructionNodeASM implements InstructionNode {
 
     @Override
     public int getOpcode() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getOpcode'");
+        return this.instructionNode.getOpcode();
     }
 
     @Override
     public InstructionNode getNextInstruction() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNextInstruction'");
+        return this.instructionNode.getNext() == null ? null 
+                : new InstructionNodeASM(this.instructionNode.getNext());
     }
 
     @Override
     public InstructionNode getPreviousInstruction() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPreviousInstruction'");
+        return this.instructionNode.getPrevious() == null ? null 
+                : new InstructionNodeASM(this.instructionNode.getPrevious());
     }
 
 }

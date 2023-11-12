@@ -72,6 +72,9 @@ public class ClassNodeASM implements ClassNode {
                 case "abstract":
                     accessLevel += Opcodes.ACC_ABSTRACT;
                     break;
+                case "interface":
+                    accessLevel += Opcodes.ACC_INTERFACE;
+                    break;
             }
         }
         return accessLevel == classNode.access;
