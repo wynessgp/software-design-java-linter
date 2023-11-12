@@ -1,18 +1,17 @@
 package domain;
 
-import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
-public class FieldInstructionNodeASM implements FieldInstructionNode {
-    private FieldInsnNode instructionNode;
+public class VarInstructionNodeASM implements VarInstructionNode {
+    private VarInsnNode instructionNode;
 
-    public FieldInstructionNodeASM(FieldInsnNode instructionNode) {
+    public VarInstructionNodeASM(VarInsnNode instructionNode) {
         this.instructionNode = instructionNode;
     }
 
-    // TODO: Enum?
     @Override
     public boolean matchesInstructionType(String type) {
-        return type.toLowerCase().equals("field_insn");
+        return type.toLowerCase().equals("var_insn");
     }
 
     @Override
@@ -20,7 +19,6 @@ public class FieldInstructionNodeASM implements FieldInstructionNode {
         return this.instructionNode.getOpcode();
     }
 
-    // TODO: Needed?
     @Override
     public InstructionNode getNextInstruction() {
         return this.instructionNode.getNext() == null ? null 
@@ -34,18 +32,8 @@ public class FieldInstructionNodeASM implements FieldInstructionNode {
     }
 
     @Override
-    public String getFieldName() {
-        return this.instructionNode.name.replace("/", ".");
-    }
-
-    @Override
-    public String getFieldOwner() {
-        return this.instructionNode.owner.replace("/", ".");
-    }
-
-    @Override
-    public String getFieldDesc() {
-        return this.instructionNode.desc.replace("/", ".");
+    public int getVarIndex() {
+        return this.instructionNode.var;
     }
     
 }

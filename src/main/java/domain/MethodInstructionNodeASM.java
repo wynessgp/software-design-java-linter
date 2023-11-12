@@ -12,7 +12,7 @@ public class MethodInstructionNodeASM implements MethodInstructionNode {
     // TODO: Enum?
     @Override
     public boolean matchesInstructionType(String type) {
-        return type.toLowerCase().equals("method");
+        return type.toLowerCase().equals("method_insn");
     }
 
     @Override

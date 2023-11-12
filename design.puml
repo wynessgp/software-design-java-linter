@@ -88,6 +88,7 @@ package domain {
         +getOpcode(): int
         +getNextInstruction(): InstructionNode
         +getPreviousInstruction(): InstructionNode
+        +getInstructionNode(): InstructionNode
     }
     +interface MethodInstructionNode {
         +getMethodName(): String
@@ -99,9 +100,13 @@ package domain {
         +getFieldOwner(): String
         +getFieldDesc(): String
     }
+    +interface VarInstructionNode {
+        +getVarIndex(): int
+    }
 
     MethodInstructionNode -u-|> InstructionNode
     FieldInstructionNode -u-|> InstructionNode
+    VarInstructionNode -u-|> InstructionNode
     ClassNode .d.> FieldNode
     ClassNode .d.> MethodNode
     InstructionNode ..> InstructionNode
@@ -172,6 +177,15 @@ package domain {
         +getFieldOwner(): String
         +getFieldDescription(): String
     }
+    +class VarInstructionNodeASM {
+        -instructionNode: VarInsnNode
+        +VarInstructionNodeASM(vin: VarInsnNode)
+        +matchesInstructionType(type: String): boolean
+        +getOpcode(): int
+        +getNextInstruction(): InstructionNode
+        +getPreviousInstruction(): InstructionNode
+        +getVarIndex(): int
+    }
 
     ClassReaderASM .u.|> ClassReader
     ClassNodeASM .u.|> ClassNode
@@ -180,6 +194,7 @@ package domain {
     InstructionNodeASM .u.|> InstructionNode
     MethodInstructionNodeASM .u.|> MethodInstructionNode
     FieldInstructionNodeASM .u.|> FieldInstructionNode
+    VarInstructionNodeASM .u.|> VarInstructionNode
     MethodNodeASM .l.> InstructionNode
     ClassReaderASM -> ClassNode
 
@@ -294,9 +309,12 @@ package asm {
         }
         +class asm.tree.MethodInsnNode {
         }
+        +class asm.tree.VarInsnNode {
+        }
 
         asm.tree.MethodInsnNode -u-|> asm.tree.AbstractInsnNode
         asm.tree.FieldInsnNode -u-|> asm.tree.AbstractInsnNode
+        asm.tree.VarInsnNode -u-|> asm.tree.AbstractInsnNode
         asm.tree.ClassNode -d-> "*" asm.tree.FieldNode
         asm.tree.ClassNode -d-> "*" asm.tree.MethodNode
         asm.tree.MethodNode -d-> "*" asm.tree.AbstractInsnNode
@@ -310,4 +328,5 @@ domain.ClassReaderASM -> asm.ClassReader
 domain.InstructionNodeASM --> asm.tree.AbstractInsnNode
 domain.MethodInstructionNodeASM --> asm.tree.MethodInsnNode
 domain.FieldInstructionNodeASM --> asm.tree.FieldInsnNode
+domain.VarInstructionNodeASM --> asm.tree.VarInsnNode
 @enduml

@@ -2,7 +2,6 @@ package domain;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
 
-// TODO: See if needed towards end of the project
 public class InstructionNodeASM implements InstructionNode {
     private AbstractInsnNode instructionNode;
 
@@ -10,11 +9,23 @@ public class InstructionNodeASM implements InstructionNode {
         this.instructionNode = instructionNode;
     }
 
-    // TODO: Make type an Enum for stuff like this
+    // TODO: better way later. This is pretty bad lol
     @Override
     public boolean matchesInstructionType(String type) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'matchesInstructionType'");
+        int calcType = 0;
+        switch (type.toLowerCase()) {
+            case "field_insn":
+                calcType = AbstractInsnNode.FIELD_INSN;
+                break;
+            case "method_insn": 
+                calcType = AbstractInsnNode.METHOD_INSN;
+                break;
+            case "var_insn":
+                calcType = AbstractInsnNode.VAR_INSN;
+                break;
+            // add more as we need
+        }
+        return calcType == instructionNode.getType();
     }
 
     @Override
