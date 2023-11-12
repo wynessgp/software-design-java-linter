@@ -79,6 +79,7 @@ public class MethodNodeASM implements MethodNode {
         int curIndex = 0;
         for (Type argType : Type.getArgumentTypes(this.methodNode.desc)) {
             namesToArgTypes.put(localVarNames.get(curIndex), argType.getClassName().replace("/", "."));
+            curIndex++;
         }
 
         return namesToArgTypes;

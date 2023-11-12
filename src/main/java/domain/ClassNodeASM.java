@@ -3,6 +3,8 @@ package domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.objectweb.asm.Opcodes;
+
 public class ClassNodeASM implements ClassNode {
     private org.objectweb.asm.tree.ClassNode classNode;
 
@@ -45,6 +47,34 @@ public class ClassNodeASM implements ClassNode {
     @Override
     public String getClassName() {
         return classNode.name.replace("/", ".");
+    }
+
+    @Override
+    public boolean matchesAccess(String access) {
+        int accessLevel = 0;
+        for (String a : access.split(" ")) {
+            switch (a.toLowerCase()) {
+                case "public":
+                    accessLevel += Opcodes.ACC_PUBLIC;
+                    break;
+                case "private":
+                    accessLevel += Opcodes.ACC_PRIVATE;
+                    break;
+                case "protected":
+                    accessLevel += Opcodes.ACC_PROTECTED;
+                    break;
+                case "static":
+                    accessLevel += Opcodes.ACC_STATIC;
+                    break;
+                case "final":
+                    accessLevel += Opcodes.ACC_FINAL;
+                    break;
+                case "abstract":
+                    accessLevel += Opcodes.ACC_ABSTRACT;
+                    break;
+            }
+        }
+        return accessLevel == classNode.access;
     }
 
 }

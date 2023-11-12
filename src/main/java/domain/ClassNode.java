@@ -8,4 +8,5 @@ public interface ClassNode {
     public List<String> getInterfaces();
     public String getSuperName();
     public String getClassName();
+    public boolean matchesAccess(String access);
 }

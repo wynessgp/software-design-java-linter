@@ -11,14 +11,12 @@ public class MethodInstructionNodeASM implements MethodInstructionNode {
 
     @Override
     public boolean matchesInstructionType(String type) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'matchesInstructionType'");
+        return type.toLowerCase().equals("method");
     }
 
     @Override
     public int getOpcode() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getOpcode'");
+        return this.instructionNode.getOpcode();
     }
 
     @Override
@@ -35,20 +33,17 @@ public class MethodInstructionNodeASM implements MethodInstructionNode {
 
     @Override
     public String getMethodName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMethodName'");
+        return this.instructionNode.name.replace("/", ".");
     }
 
     @Override
     public String getMethodOwner() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMethodOwner'");
+        return this.instructionNode.owner.replace("/", ".");
     }
 
     @Override
     public String getMethodDesc() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMethodDesc'");
+        return this.instructionNode.desc.replace("/", ".");
     }
     
 }

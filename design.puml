@@ -45,6 +45,7 @@ package domain {
 
     }
     +interface ClassNode {
+        +matchesAccess(access: String): boolean
         +getFields(): List<FieldNode>
         +getMethods(): List<MethodNode>
         +getInterfaces(): List<String>
@@ -96,6 +97,7 @@ package domain {
     +class ClassNodeASM {
         -classNode: ClassNode
         +ClassNodeASM(cn: ClassNode)
+        +matchesAccess(access: String): boolean
         +getFields(): List<FieldNode>
         +getMethods(): List<MethodNode>
         +getInterfaces(): List<String>

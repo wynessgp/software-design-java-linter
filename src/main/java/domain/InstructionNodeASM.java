@@ -2,6 +2,9 @@ package domain;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
 
+// TODO: Is this class needed?
+// We already sneak around abstraction with field and method instruction nodes.
+
 public class InstructionNodeASM implements InstructionNode {
     private AbstractInsnNode instructionNode;
 

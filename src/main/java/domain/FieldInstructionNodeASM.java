@@ -11,22 +11,22 @@ public class FieldInstructionNodeASM implements FieldInstructionNode {
 
     @Override
     public boolean matchesInstructionType(String type) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'matchesInstructionType'");
+        return type.toLowerCase().equals("field");
     }
 
     @Override
     public int getOpcode() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getOpcode'");
+        return this.instructionNode.getOpcode();
     }
 
+    // TODO: Needed?
     @Override
     public InstructionNode getNextInstruction() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getNextInstruction'");
     }
 
+    // TODO: Needed?
     @Override
     public InstructionNode getPreviousInstruction() {
         // TODO Auto-generated method stub
@@ -36,19 +36,17 @@ public class FieldInstructionNodeASM implements FieldInstructionNode {
     @Override
     public String getFieldName() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFieldName'");
+        return this.instructionNode.name.replace("/", ".");
     }
 
     @Override
     public String getFieldOwner() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFieldOwner'");
+        return this.instructionNode.owner.replace("/", ".");
     }
 
     @Override
     public String getFieldDesc() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFieldDesc'");
+        return this.instructionNode.desc.replace("/", ".");
     }
     
 }
