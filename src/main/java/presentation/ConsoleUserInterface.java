@@ -31,6 +31,12 @@ public class ConsoleUserInterface implements UserInterface {
         promptForWorkingDirectory();
     }
 
+    /**
+     * Ensures a directory with .class files is provided. If an argument is passed
+     * in, check the path. Otherwise, prompt the user for a working directory.
+     * 
+     * @see ConsoleScanner ConsoleScanner (Handles user input)
+     */
     private void promptForWorkingDirectory() {
         switch (args.length) {
             case 0:
@@ -53,6 +59,12 @@ public class ConsoleUserInterface implements UserInterface {
         displayDetectedFiles();
     }
 
+    /**
+     * Perform the recursive file search using a StandardInput reader. Additionally
+     * process each file's bytecode for further analysis.
+     * 
+     * @see datasource.RecursiveDiver
+     */
     private void displayDetectedFiles() {
         List<String> classPaths = new ArrayList<>();
         this.reader = new RecursiveDiver(projectDirectory);
@@ -74,11 +86,19 @@ public class ConsoleUserInterface implements UserInterface {
         promptForCheckOptions();
     }
 
+    /**
+     * Ask the user which checks they would like to run.
+     * 
+     * @see domain.LintRunner#checkTypes checkTypes (Required list of check
+     *      instances)
+     * @see domain.LintRunner#addCheck(CheckStrategy)
+     */
     private void promptForCheckOptions() {
         Map<String, Object> checkTypes = runner.getCheckTypes();
         List<String> continueOptions = Arrays.asList(new String[] { "y", "" });
+        System.out.println("\nPlease select the checks you would like to perform:");
         for (String check : checkTypes.keySet()) {
-            System.out.print("Would you like to perform " + check + " check? [Y/n] ");
+            System.out.print("\t" + check + " check? [Y/n] ");
             if (continueOptions.contains(userInput.getNextLine().toLowerCase())) {
                 runner.addCheck((CheckStrategy) checkTypes.get(check));
             }
@@ -90,10 +110,23 @@ public class ConsoleUserInterface implements UserInterface {
         runChecks();
     }
 
+    /**
+     * Tell the runner to process the bytecode and return the results. Displays the
+     * check results to the user.
+     * 
+     * @see domain.LintRunner#runChecks()
+     */
     private void runChecks() {
         System.out.print("Press enter to run checks");
         userInput.getNextLine();
         Map<String, List<String>> results = this.runner.runChecks();
+        for (String resultName : results.keySet()) {
+            System.out.print(resultName + ": ");
+            System.out.println(results.get(resultName).isEmpty() ? "No results" : "");
+            for (String result : results.get(resultName)) {
+                System.out.println("\t" + result);
+            }
+        }
         promptForSavingResults();
         promptForCodeCleanup();
         promptForUmlGeneration();
