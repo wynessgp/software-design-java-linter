@@ -96,7 +96,14 @@ package domain {
         +getOpcode(): int
         +getNextInstruction(): InstructionNode
         +getPreviousInstruction(): InstructionNode
+        +toMethodInstruction(): MethodInstructionNode
+        +toFieldInstruction(): FieldInstructionNode
+        +toVarInstruction(): VarInstructionNode
     }
+    InstructionNode .> MethodInstructionNode
+    InstructionNode .> FieldInstructionNode
+    InstructionNode .> VarInstructionNode
+
     +interface MethodInstructionNode extends InstructionNode {
         +getMethodName(): String
         +getMethodOwner(): String
@@ -159,6 +166,9 @@ package domain {
         +getOpcode(): int
         +getNextInstruction(): InstructionNode
         +getPreviousInstruction(): InstructionNode
+        +toMethodInstruction(): MethodInstructionNode
+        +toFieldInstruction(): FieldInstructionNode
+        +toVarInstruction(): VarInstructionNode
     }
     +class MethodInstructionNodeASM extends InstructionNodeASM {
         -methodInstructionNode: MethodInsnNode
@@ -207,7 +217,7 @@ package domain {
         -parseFields(classNode: ClassNode): void
         -parseMethods(classNode: ClassNode): void
         -parseInstructions(classNode: ClassNode, methodNode: MethodNode): void
-        -traceDependency(dependant: String, dependency: String): void
+        -addDeclaredVariable(dependant: String, dependency: String): void
         +handleResults(): List<String>
         +getCheckName(): String
     }
@@ -215,10 +225,7 @@ package domain {
     StaticCheck .> FieldNode
     StaticCheck .> MethodNode
     StaticCheck .> InstructionNode
-    StaticCheck .> FieldInstructionNode
-    StaticCheck .> FieldInstructionNodeASM
     StaticCheck .> MethodInstructionNode
-    StaticCheck .> MethodInstructionNodeASM
 
     +class FormattingCheck implements CheckStrategy {
         +performCheck(classes: List<ClassNode>): void

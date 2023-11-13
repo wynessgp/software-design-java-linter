@@ -44,4 +44,19 @@ public class InstructionNodeASM implements InstructionNode {
         return this.instructionNode.getPrevious() == null ? null
                 : new InstructionNodeASM(this.instructionNode.getPrevious());
     }
+
+    @Override
+    public MethodInstructionNode toMethodInstruction() {
+        return new MethodInstructionNodeASM(this);
+    }
+
+    @Override
+    public FieldInstructionNode toFieldInstruction() {
+        return new FieldInstructionNodeASM(this);
+    }
+
+    @Override
+    public VarInstructionNode toVarInstruction() {
+        return new VarInstructionNodeASM(this);
+    }
 }

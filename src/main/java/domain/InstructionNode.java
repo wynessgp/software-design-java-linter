@@ -8,4 +8,10 @@ public interface InstructionNode {
     public InstructionNode getNextInstruction();
 
     public InstructionNode getPreviousInstruction();
+
+    public MethodInstructionNode toMethodInstruction();
+
+    public FieldInstructionNode toFieldInstruction();
+
+    public VarInstructionNode toVarInstruction();
 }

@@ -49,7 +49,7 @@ public class StaticCheck implements CheckStrategy {
     private void parseInstructions(ClassNode classNode, MethodNode method) {
         for (InstructionNode instruction : method.getInstructions()) {
             if (instruction.matchesInstructionType("method_insn")) {
-                MethodInstructionNode methodInstruction = new MethodInstructionNodeASM(instruction);
+                MethodInstructionNode methodInstruction = instruction.toMethodInstruction();
                 if (methodInstruction.getMethodName().equals("<init>")) {
                     addDeclaredVariable(classNode.getClassName(), methodInstruction.getMethodOwner());
                 }
