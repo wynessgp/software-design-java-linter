@@ -254,7 +254,7 @@ package domain {
         +performCheck(classes: List<ClassNode>): void
         +handleResults(): List<String>
         +getCheckName(): String
-        -singleClassCheck(cn: ClassNode): void
+        -parseInstructionsForViolation(cn: ClassNode): void
     }
     HollywoodCheck .> ClassNode
     HollywoodCheck .> MethodNode
@@ -279,6 +279,7 @@ package domain {
         -interfaceNameToUnconfirmedConcreteComponents: Map<String, Set<String>>
         -interfaceNameToUnconfirmedAbstractDecorators: Map<String, Set<String>>
         -abstractDecoNameToUnconfirmedConcreteDecorators: Map<String, Set<String>>
+        +DecoratorCheck()
         +performCheck(classes: List<ClassNode>): void
         +handleResults(): List<String>
         +getCheckName(): String

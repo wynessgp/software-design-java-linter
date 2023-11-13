@@ -19,7 +19,7 @@ public class HollywoodCheck implements CheckStrategy {
     @Override
     public void performCheck(List<ClassNode> classNames) {
         for (ClassNode cn : classNames) {
-            singleClassCheck(cn);
+            parseInstructionsForViolation(cn);
         }
     }
 
@@ -28,9 +28,11 @@ public class HollywoodCheck implements CheckStrategy {
         List<String> ret = new ArrayList<>();
         for (String s : analyzedClasses) {
             if (classToViolatingCalls.containsKey(s)) {
-                ret.add("\nClass: " + s
-                        + " violates the Hollywood Principle by calling the following: \n");
-                ret.add("\t\t" + classToViolatingCalls.get(s) + "\n");
+                ret.add("Class: " + s
+                        + " violates the Hollywood Principle by calling the following: ");
+                ret.add("\t\t" + classToViolatingCalls.get(s));
+            } else {
+                ret.add("No violations in class: " + s);
             }
         }
         return ret;
@@ -41,9 +43,11 @@ public class HollywoodCheck implements CheckStrategy {
         return "Hollywood";
     }
 
-    private void singleClassCheck(ClassNode cn) {
-        String superName = cn.getSuperName();
-        String className = cn.getClassName();
+    // this isn't split up into multiple parts for methods, instructions, etc.
+    // because the work would simply be looping in each one. 
+    private void parseInstructionsForViolation(ClassNode cn) {
+        String superName = cn.getSuperName().replace("/", ".");
+        String className = cn.getClassName().replace("/", ".");
         this.analyzedClasses.add(className);
 
         for (MethodNode mn : cn.getMethods()) {
@@ -55,11 +59,28 @@ public class HollywoodCheck implements CheckStrategy {
                     continue;
                 // ok, so it's a method instruction.
                 // do the casting.
-
+                MethodInstructionNode min = in.toMethodInstruction();
                 // check to see if the method's name is one of the exceptions,
                 // those being equals, hashCode, <init>, <clinit>
-
+                if (min.getMethodName().equals("equals") ||
+                    min.getMethodName().equals("hashCode") ||
+                    min.getMethodName().contains("init>"))
+                    continue;
+                // it's not one of our exceptions.
+                // now, does the method belong to our superclass?
+                if (min.getMethodOwner().replace("/", ".").equals(superName)) {
+                    addViolation(min.getMethodName(), className);
+                }
             }
+        }
+    }
+
+    private void addViolation(String methodCallName, String classViolating) {
+        if (classToViolatingCalls.containsKey(classViolating)) {
+            classToViolatingCalls.get(classViolating).add("super." + methodCallName);
+        } else {
+            classToViolatingCalls.put(classViolating, new HashSet<String>());
+            classToViolatingCalls.get(classViolating).add("super." + methodCallName);
         }
     }
 }
