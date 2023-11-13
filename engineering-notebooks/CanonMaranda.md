@@ -208,3 +208,20 @@
   - Same approach as before, looking for instances of classes where all public items are static
   - Provided updated test case (should fail the check)
   - Working on providing proper output
+
+## 11/13 1-4:30pm
+### Plan:
+- Fix implementation of static check
+  - Add new adapters/methods if necessary
+- Work on remaining checks
+
+### Progress:
+- Updated arguments for faster debugging
+  - Running `java Main <dir> <check-name> ...` will import the directory and select the provided checks
+- Static check test produces correct output
+  - Look for public, non-static methods and fields to determine non-static classes
+  - Added methods to remove ASM types from check code
+- Additional static check test added
+- Update design
+  - Using inheritance with InstructionNode adapter classes
+- Continue working on remaining checks later today
