@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,11 +82,17 @@ public class MethodNodeASM implements MethodNode {
         }
         int curIndex = 0;
         for (Type argType : Type.getArgumentTypes(this.methodNode.desc)) {
-            namesToArgTypes.put(localVarNames.get(curIndex), argType.getClassName().replace("/", "."));
+            namesToArgTypes.put(localVarNames.get(curIndex),
+                    argType.getClassName().replace("/", "."));
             curIndex++;
         }
 
         return namesToArgTypes;
     }
 
+    @Override
+    public List<String> getArgTypes() {
+        return Arrays.asList(Type.getArgumentTypes(this.methodNode.desc)).stream()
+                .map(Type::getClassName).toList();
+    }
 }

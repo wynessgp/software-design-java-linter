@@ -46,5 +46,4 @@ public class RecursiveDiver implements StandardInput {
 	public String next() {
 		return hasNext() ? iter.next() : null;
 	}
-
 }

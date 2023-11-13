@@ -20,5 +20,4 @@ public class ThreeLayerCheck implements CheckStrategy {
     public String getCheckName() {
         return "Three layer";
     }
-
 }

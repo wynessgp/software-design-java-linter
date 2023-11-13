@@ -26,20 +26,20 @@ public class DecoratorCheck implements CheckStrategy {
 
     // Graph traversal stuff
     // First map: "This is a concrete class, and it implements an interface. However,
-    //             I haven't yet seen if the interface is actually an abstract
-    //             component, so I'll hold off until the interface confirms me,
-    //             if it appears."
+    // I haven't yet seen if the interface is actually an abstract
+    // component, so I'll hold off until the interface confirms me,
+    // if it appears."
     private Map<String, Set<String>> interfaceNameToUnconfirmedConcreteComponents;
 
     // Second map: "This is an abstract class, and it both implements and has a field
-    //              of the interface's type, but we haven't yet seen that interface as
-    //              an actual abstract component, so I'll hold off until the interface
-    //              confirms me, if it appears."
+    // of the interface's type, but we haven't yet seen that interface as
+    // an actual abstract component, so I'll hold off until the interface
+    // confirms me, if it appears."
     private Map<String, Set<String>> interfaceNameToUnconfirmedAbstractDecorators;
 
-    // Third map: "This is a concrete class, and it extends another class. However, 
-    //             I haven't yet seen the class it extends, so I'll hold off until
-    //             the abstract decorator confirms me, if it appears."
+    // Third map: "This is a concrete class, and it extends another class. However,
+    // I haven't yet seen the class it extends, so I'll hold off until
+    // the abstract decorator confirms me, if it appears."
     private Map<String, Set<String>> abstractDecoNameToUnconfirmedConcreteDecorators;
 
     private Set<String> outsideClasses;
@@ -133,14 +133,17 @@ public class DecoratorCheck implements CheckStrategy {
             // These are sets, so duplicated adds shouldn't matter. Plus, we only view each
             // class once.
             if (interfaceNameToUnconfirmedConcreteComponents.containsKey(dottedClassName))
-                concreteComponents.addAll(interfaceNameToUnconfirmedConcreteComponents.get(dottedClassName));
+                concreteComponents
+                        .addAll(interfaceNameToUnconfirmedConcreteComponents.get(dottedClassName));
             if (interfaceNameToUnconfirmedAbstractDecorators.containsKey(dottedClassName))
-                abstractDecorators.addAll(interfaceNameToUnconfirmedAbstractDecorators.get(dottedClassName));
+                abstractDecorators
+                        .addAll(interfaceNameToUnconfirmedAbstractDecorators.get(dottedClassName));
             // since we also just confirmed an abstract decorator, we need to confirm its
             // associated concrete decorators.
             for (String abstDeco : abstractDecorators) {
                 if (abstractDecoNameToUnconfirmedConcreteDecorators.containsKey(abstDeco)) {
-                    concreteDecorators.addAll(abstractDecoNameToUnconfirmedConcreteDecorators.get(abstDeco));
+                    concreteDecorators
+                            .addAll(abstractDecoNameToUnconfirmedConcreteDecorators.get(abstDeco));
                 }
             }
             // removal happens before we print
@@ -179,13 +182,15 @@ public class DecoratorCheck implements CheckStrategy {
                             absDecos.add(dottedClassName);
                             interfaceNameToUnconfirmedAbstractDecorators.put(s, absDecos);
                         } else {
-                            interfaceNameToUnconfirmedAbstractDecorators.get(s).add(dottedClassName);
+                            interfaceNameToUnconfirmedAbstractDecorators.get(s)
+                                    .add(dottedClassName);
                         }
                     } else {
                         abstractDecorators.add(dottedClassName);
                         // additionally, respect graph traversal items. So, concrete decorators get
                         // moved, too.
-                        concreteDecorators.addAll(abstractDecoNameToUnconfirmedConcreteDecorators.get(dottedClassName));
+                        concreteDecorators.addAll(abstractDecoNameToUnconfirmedConcreteDecorators
+                                .get(dottedClassName));
                         // remove happens before we print
                         return true;
                     }
@@ -268,7 +273,8 @@ public class DecoratorCheck implements CheckStrategy {
                 concreteDecos.add(dottedName);
                 abstractDecoNameToUnconfirmedConcreteDecorators.put(dottedSuperName, concreteDecos);
             } else {
-                abstractDecoNameToUnconfirmedConcreteDecorators.get(dottedSuperName).add(dottedName);
+                abstractDecoNameToUnconfirmedConcreteDecorators.get(dottedSuperName)
+                        .add(dottedName);
             }
         }
 

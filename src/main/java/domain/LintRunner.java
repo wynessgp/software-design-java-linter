@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public class LintRunner {
-    private static CheckStrategy[] checkTypes = new CheckStrategy[] { new StaticMethodCheck(), new FormattingCheck(),
-            new UnusedItemsCheck(), new InformationHidingCheck(), new ThreeLayerCheck(), new HollywoodCheck(),
-            new FacadeCheck(), new StrategyCheck(), new DecoratorCheck() };
+    private static CheckStrategy[] checkTypes =
+            new CheckStrategy[] {new StaticCheck(), new FormattingCheck(), new UnusedItemsCheck(),
+                    new InformationHidingCheck(), new ThreeLayerCheck(), new HollywoodCheck(),
+                    new FacadeCheck(), new StrategyCheck(), new DecoratorCheck()};
     private List<CheckStrategy> strategies;
     private List<ClassReader> readers;
 
@@ -23,8 +24,8 @@ public class LintRunner {
             ClassReader classReader = new ClassReaderASM();
             if (classReader.acceptClass(className)) {
                 readers.add(classReader);
-                classPaths.add(className.substring(className
-                        .lastIndexOf(className.contains("\\") ? '\\' : '/') + 1));
+                classPaths.add(className.substring(
+                        className.lastIndexOf(className.contains("\\") ? '\\' : '/') + 1));
             }
         }
         return classPaths;
@@ -36,8 +37,7 @@ public class LintRunner {
 
     public Map<String, List<String>> runChecks() {
         Map<String, List<String>> results = new HashMap<>();
-        List<ClassNode> classNodes = readers.stream()
-                .map(ClassReader::getClassNode).toList();
+        List<ClassNode> classNodes = readers.stream().map(ClassReader::getClassNode).toList();
         for (CheckStrategy check : this.strategies) {
             check.performCheck(classNodes);
             results.put(check.getCheckName(), check.handleResults());

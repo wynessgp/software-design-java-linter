@@ -29,7 +29,8 @@ public class HollywoodCheck implements CheckStrategy {
         List<String> ret = new ArrayList<>();
         for (String s : analyzedClasses) {
             if (classToViolatingCalls.containsKey(s)) {
-                ret.add("\nClass: " + s + " violates the Hollywood Principle by calling the following: \n");
+                ret.add("\nClass: " + s
+                        + " violates the Hollywood Principle by calling the following: \n");
                 ret.add("\t\t" + classToViolatingCalls.get(s) + "\n");
             }
         }
@@ -55,12 +56,11 @@ public class HollywoodCheck implements CheckStrategy {
                     continue;
                 // ok, so it's a method instruction.
                 // do the casting.
-                
+
                 // check to see if the method's name is one of the exceptions,
                 // those being equals, hashCode, <init>, <clinit>
-                
+
             }
         }
-
     }
 }

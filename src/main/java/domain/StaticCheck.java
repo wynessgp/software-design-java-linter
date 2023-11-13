@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class StaticMethodCheck implements CheckStrategy {
+public class StaticCheck implements CheckStrategy {
     private Set<String> visitedClasses;
     private Set<String> nonStaticClasses;
     private Map<String, Set<String>> declarations;
     private Map<String, Set<String>> classDependencies;
 
-    public StaticMethodCheck() {
+    public StaticCheck() {
         this.visitedClasses = new HashSet<>();
         this.nonStaticClasses = new HashSet<>();
         this.declarations = new HashMap<>();
@@ -45,11 +45,12 @@ public class StaticMethodCheck implements CheckStrategy {
 
     private void parseMethods(ClassNode classNode) {
         for (MethodNode method : classNode.getMethods()) {
-            if (!method.matchesAccess("public static") && !method.getMethodName().contains("init>")) {
+            if (!method.matchesAccess("public static")
+                    && !method.getMethodName().contains("init>")) {
                 nonStaticClasses.add(classNode.getClassName().replace("/", "."));
             }
             trackDependency(classNode.getClassName(), method.getReturnType());
-            for (String arg : method.getArgs().values()) {
+            for (String arg : method.getArgTypes()) {
                 trackDependency(classNode.getClassName(), arg);
             }
         }
@@ -100,6 +101,6 @@ public class StaticMethodCheck implements CheckStrategy {
 
     @Override
     public String getCheckName() {
-        return "Static method";
+        return "Static";
     }
 }

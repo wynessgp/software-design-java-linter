@@ -20,5 +20,4 @@ public class FormattingCheck implements CheckStrategy {
     public String getCheckName() {
         return "Formatting";
     }
-
 }

@@ -10,4 +10,5 @@ public interface MethodNode {
     public List<InstructionNode> getInstructions();
     public String getReturnType();
     public Map<String, String> getArgs();
+    public List<String> getArgTypes();
 }

@@ -32,8 +32,8 @@ public class ConsoleUserInterface implements UserInterface {
     }
 
     /**
-     * Ensures a directory with .class files is provided. If an argument is passed
-     * in, check the path. Otherwise, prompt the user for a working directory.
+     * Ensures a directory with .class files is provided. If an argument is passed in, check the
+     * path. Otherwise, prompt the user for a working directory.
      * 
      * @see ConsoleScanner ConsoleScanner (Handles user input)
      */
@@ -43,14 +43,10 @@ public class ConsoleUserInterface implements UserInterface {
                 System.out.println("Please enter the path to your project directory");
                 projectDirectory = new File(userInput.getNextLine());
                 break;
-            case 1:
+            default:
                 System.out.println("Detected command line argument");
                 projectDirectory = new File(args[0]);
                 break;
-            default:
-                System.out.println("Too many command line arguments");
-                System.out.println("Usage: java -jar linter.jar <projectDirectory>");
-                System.exit(1);
         }
         if (!projectDirectory.exists()) {
             System.out.println("The specified directory does not exist");
@@ -60,8 +56,8 @@ public class ConsoleUserInterface implements UserInterface {
     }
 
     /**
-     * Perform the recursive file search using a StandardInput reader. Additionally
-     * process each file's bytecode for further analysis.
+     * Perform the recursive file search using a StandardInput reader. Additionally process each
+     * file's bytecode for further analysis.
      * 
      * @see datasource.RecursiveDiver
      */
@@ -89,30 +85,43 @@ public class ConsoleUserInterface implements UserInterface {
     /**
      * Ask the user which checks they would like to run.
      * 
-     * @see domain.LintRunner#checkTypes checkTypes (Required list of check
-     *      instances)
+     * @see domain.LintRunner#checkTypes checkTypes (Required list of check instances)
      * @see domain.LintRunner#addCheck(CheckStrategy)
      */
     private void promptForCheckOptions() {
         Map<String, Object> checkTypes = runner.getCheckTypes();
-        List<String> continueOptions = Arrays.asList(new String[] { "y", "" });
-        System.out.println("\nPlease select the checks you would like to perform:");
-        for (String check : checkTypes.keySet()) {
-            System.out.print("\t" + check + " check? [Y/n] ");
-            if (continueOptions.contains(userInput.getNextLine().toLowerCase())) {
-                runner.addCheck((CheckStrategy) checkTypes.get(check));
+        if (this.args.length < 2) {
+            List<String> continueOptions = Arrays.asList(new String[] {"y", ""});
+            System.out.println("\nPlease select the checks you would like to perform:");
+            for (String check : checkTypes.keySet()) {
+                System.out.print("\t" + check + " check? [Y/n] ");
+                if (continueOptions.contains(userInput.getNextLine().toLowerCase())) {
+                    runner.addCheck((CheckStrategy) checkTypes.get(check));
+                }
             }
-        }
-        if (runner.isChecksEmpty()) {
-            System.out.println("No checks selected");
-            System.exit(1);
+            if (runner.isChecksEmpty()) {
+                System.out.println("No checks selected");
+                System.exit(1);
+            }
+        } else {
+            String[] checksFromArgs = Arrays.copyOfRange(args, 1, args.length);
+            for (String arg : checksFromArgs) {
+                arg = arg.substring(0, 1).toUpperCase()
+                        + arg.substring(1).replace("-", " ").toLowerCase();
+                if (!checkTypes.containsKey(arg)) {
+                    System.out.println(arg + " check does not exist");
+                    System.exit(1);
+                }
+                runner.addCheck((CheckStrategy) checkTypes.get(arg));
+                System.out.println(arg + " check added");
+            }
         }
         runChecks();
     }
 
     /**
-     * Tell the runner to process the bytecode and return the results. Displays the
-     * check results to the user.
+     * Tell the runner to process the bytecode and return the results. Displays the check results to
+     * the user.
      * 
      * @see domain.LintRunner#runChecks()
      */

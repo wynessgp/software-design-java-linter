@@ -11,7 +11,8 @@ public class ClassReaderASM implements ClassReader {
     @Override
     public boolean acceptClass(String classPath) {
         try {
-            this.classReader = new org.objectweb.asm.ClassReader(new FileReader(new File(classPath)));
+            this.classReader =
+                    new org.objectweb.asm.ClassReader(new FileReader(new File(classPath)));
             this.classNode = new ClassNodeASM();
             this.classReader.accept(((ClassNodeASM) classNode).getAsmNode(),
                     org.objectweb.asm.ClassReader.EXPAND_FRAMES);
@@ -25,5 +26,4 @@ public class ClassReaderASM implements ClassReader {
     public ClassNode getClassNode() {
         return this.classNode;
     }
-
 }

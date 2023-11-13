@@ -60,5 +60,4 @@ public class FieldNodeASM implements FieldNode {
     public String getFieldType() {
         return Type.getObjectType(this.fieldNode.desc).getClassName();
     }
-
 }

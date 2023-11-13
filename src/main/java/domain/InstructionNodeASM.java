@@ -17,7 +17,7 @@ public class InstructionNodeASM implements InstructionNode {
             case "field_insn":
                 calcType = AbstractInsnNode.FIELD_INSN;
                 break;
-            case "method_insn": 
+            case "method_insn":
                 calcType = AbstractInsnNode.METHOD_INSN;
                 break;
             case "var_insn":
@@ -35,14 +35,13 @@ public class InstructionNodeASM implements InstructionNode {
 
     @Override
     public InstructionNode getNextInstruction() {
-        return this.instructionNode.getNext() == null ? null 
+        return this.instructionNode.getNext() == null ? null
                 : new InstructionNodeASM(this.instructionNode.getNext());
     }
 
     @Override
     public InstructionNode getPreviousInstruction() {
-        return this.instructionNode.getPrevious() == null ? null 
+        return this.instructionNode.getPrevious() == null ? null
                 : new InstructionNodeASM(this.instructionNode.getPrevious());
     }
-
 }

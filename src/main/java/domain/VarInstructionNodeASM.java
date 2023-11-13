@@ -21,13 +21,13 @@ public class VarInstructionNodeASM implements VarInstructionNode {
 
     @Override
     public InstructionNode getNextInstruction() {
-        return this.instructionNode.getNext() == null ? null 
+        return this.instructionNode.getNext() == null ? null
                 : new InstructionNodeASM(this.instructionNode.getNext());
     }
 
     @Override
     public InstructionNode getPreviousInstruction() {
-        return this.instructionNode.getPrevious() == null ? null 
+        return this.instructionNode.getPrevious() == null ? null
                 : new InstructionNodeASM(this.instructionNode.getPrevious());
     }
 
@@ -35,5 +35,4 @@ public class VarInstructionNodeASM implements VarInstructionNode {
     public int getVarIndex() {
         return this.instructionNode.var;
     }
-    
 }
