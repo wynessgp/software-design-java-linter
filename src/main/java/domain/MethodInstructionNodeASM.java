@@ -5,8 +5,9 @@ import org.objectweb.asm.tree.MethodInsnNode;
 public class MethodInstructionNodeASM implements MethodInstructionNode {
     private MethodInsnNode instructionNode;
 
-    public MethodInstructionNodeASM(MethodInsnNode instructionNode) {
-        this.instructionNode = instructionNode;
+    public MethodInstructionNodeASM(InstructionNode instructionNode) {
+        this.instructionNode =
+                (MethodInsnNode) (((InstructionNodeASM) instructionNode).instructionNode);
     }
 
     // TODO: Enum?
@@ -23,7 +24,7 @@ public class MethodInstructionNodeASM implements MethodInstructionNode {
     // TODO: Evalutate if we need these near end of implementation
     @Override
     public InstructionNode getNextInstruction() {
-        return this.instructionNode.getNext() == null ? null 
+        return this.instructionNode.getNext() == null ? null
                 : new InstructionNodeASM(this.instructionNode.getNext());
     }
 

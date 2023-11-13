@@ -10,13 +10,11 @@ import java.util.Set;
 public class StaticCheck implements CheckStrategy {
     private Set<String> visitedClasses;
     private Set<String> nonStaticClasses;
-    private Map<String, Set<String>> declarations;
     private Map<String, Set<String>> classDependencies;
 
     public StaticCheck() {
         this.visitedClasses = new HashSet<>();
         this.nonStaticClasses = new HashSet<>();
-        this.declarations = new HashMap<>();
         this.classDependencies = new HashMap<>();
     }
 
@@ -35,23 +33,35 @@ public class StaticCheck implements CheckStrategy {
 
     private void parseFields(ClassNode classNode) {
         for (FieldNode field : classNode.getFields()) {
-            if (!field.matchesAccess("public static")) {
+            if (field.matchesAccess("public")) {
                 nonStaticClasses.add(classNode.getClassName().replace("/", "."));
             }
             trackDependency(classNode.getClassName(), field.getFieldType());
-            addDeclaredVariable(classNode.getClassName(), field.getFieldType());
         }
     }
 
     private void parseMethods(ClassNode classNode) {
         for (MethodNode method : classNode.getMethods()) {
-            if (!method.matchesAccess("public static")
+            if (method.matchesAccess("public")
                     && !method.getMethodName().contains("init>")) {
                 nonStaticClasses.add(classNode.getClassName().replace("/", "."));
             }
             trackDependency(classNode.getClassName(), method.getReturnType());
             for (String arg : method.getArgTypes()) {
                 trackDependency(classNode.getClassName(), arg);
+            }
+            parseInstructions(classNode, method);
+        }
+    }
+
+    private void parseInstructions(ClassNode classNode, MethodNode method) {
+        for (InstructionNode instruction : method.getInstructions()) {
+            if (instruction.matchesInstructionType("field_insn")) {
+                FieldInstructionNode fieldInstruction = new FieldInstructionNodeASM(instruction);
+                trackDependency(classNode.getClassName(), fieldInstruction.getFieldOwner());
+            } else if (instruction.matchesInstructionType("method_insn")) {
+                MethodInstructionNode methodInstruction = new MethodInstructionNodeASM(instruction);
+                trackDependency(classNode.getClassName(), methodInstruction.getMethodOwner());
             }
         }
     }
@@ -70,29 +80,17 @@ public class StaticCheck implements CheckStrategy {
         }
     }
 
-    private void addDeclaredVariable(String dependent, String dependency) {
-        dependent = dependent.replace("/", ".");
-        dependency = dependency.replace("/", ".");
-        if (dependent.equals(dependency)) {
-            return;
-        }
-        if (declarations.containsKey(dependent)) {
-            declarations.get(dependent).add(dependency);
-        } else {
-            declarations.put(dependent, new HashSet<String>());
-            declarations.get(dependent).add(dependency);
-        }
-    }
-
     @Override
     public List<String> handleResults() {
         List<String> staticViolations = new ArrayList<>();
         HashSet<String> staticClasses = new HashSet<>(visitedClasses);
         staticClasses.removeAll(nonStaticClasses);
-        for (String from : declarations.keySet()) {
-            for (String to : declarations.get(from)) {
-                if (staticClasses.contains(to) && !from.equals(to)) {
-                    staticViolations.add(String.format("Class %s should not declare %s", from, to));
+        for (String otherClass : classDependencies.keySet()) {
+            for (String staticClass : staticClasses) {
+                if (classDependencies.get(otherClass).contains(staticClass)
+                        && !otherClass.equals(staticClass)) {
+                    staticViolations.add(String.format("Class %s should not declare %s", otherClass,
+                            staticClass));
                 }
             }
         }

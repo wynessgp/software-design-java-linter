@@ -5,8 +5,9 @@ import org.objectweb.asm.tree.FieldInsnNode;
 public class FieldInstructionNodeASM implements FieldInstructionNode {
     private FieldInsnNode instructionNode;
 
-    public FieldInstructionNodeASM(FieldInsnNode instructionNode) {
-        this.instructionNode = instructionNode;
+    public FieldInstructionNodeASM(InstructionNode instructionNode) {
+        this.instructionNode =
+                (FieldInsnNode) (((InstructionNodeASM) instructionNode).instructionNode);
     }
 
     // TODO: Enum?

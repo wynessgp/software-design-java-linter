@@ -5,8 +5,9 @@ import org.objectweb.asm.tree.VarInsnNode;
 public class VarInstructionNodeASM implements VarInstructionNode {
     private VarInsnNode instructionNode;
 
-    public VarInstructionNodeASM(VarInsnNode instructionNode) {
-        this.instructionNode = instructionNode;
+    public VarInstructionNodeASM(InstructionNode instructionNode) {
+        this.instructionNode =
+                (VarInsnNode) (((InstructionNodeASM) instructionNode).instructionNode);
     }
 
     @Override
