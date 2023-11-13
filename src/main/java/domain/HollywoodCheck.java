@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class HollywoodCheck implements CheckStrategy {
-
     private Map<String, Set<String>> classToViolatingCalls;
     private Set<String> analyzedClasses;
 

@@ -3,7 +3,7 @@ package domain;
 import org.objectweb.asm.tree.AbstractInsnNode;
 
 public class InstructionNodeASM implements InstructionNode {
-    AbstractInsnNode instructionNode;
+    protected AbstractInsnNode instructionNode;
 
     public InstructionNodeASM(AbstractInsnNode instructionNode) {
         this.instructionNode = instructionNode;

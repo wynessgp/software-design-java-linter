@@ -2,12 +2,18 @@ package domain;
 
 import org.objectweb.asm.tree.FieldInsnNode;
 
-public class FieldInstructionNodeASM implements FieldInstructionNode {
-    private FieldInsnNode instructionNode;
+public class FieldInstructionNodeASM extends InstructionNodeASM implements FieldInstructionNode {
+    private FieldInsnNode fieldInstructionNode;
 
     public FieldInstructionNodeASM(InstructionNode instructionNode) {
-        this.instructionNode =
+        super(((InstructionNodeASM) instructionNode).instructionNode);
+        this.fieldInstructionNode =
                 (FieldInsnNode) (((InstructionNodeASM) instructionNode).instructionNode);
+    }
+
+    public FieldInstructionNodeASM(FieldInsnNode instructionNode) {
+        super(instructionNode);
+        this.fieldInstructionNode = instructionNode;
     }
 
     // TODO: Enum?
@@ -17,36 +23,18 @@ public class FieldInstructionNodeASM implements FieldInstructionNode {
     }
 
     @Override
-    public int getOpcode() {
-        return this.instructionNode.getOpcode();
-    }
-
-    // TODO: Needed?
-    @Override
-    public InstructionNode getNextInstruction() {
-        return this.instructionNode.getNext() == null ? null
-                : new InstructionNodeASM(this.instructionNode.getNext());
-    }
-
-    @Override
-    public InstructionNode getPreviousInstruction() {
-        return this.instructionNode.getPrevious() == null ? null
-                : new InstructionNodeASM(this.instructionNode.getPrevious());
-    }
-
-    @Override
     public String getFieldName() {
-        return this.instructionNode.name.replace("/", ".");
+        return this.fieldInstructionNode.name.replace("/", ".");
     }
 
     @Override
     public String getFieldOwner() {
-        return this.instructionNode.owner.replace("/", ".");
+        return this.fieldInstructionNode.owner.replace("/", ".");
     }
 
     @Override
     public String getFieldDesc() {
-        return this.instructionNode.desc.replace("/", ".");
+        return this.fieldInstructionNode.desc.replace("/", ".");
     }
 
 }
