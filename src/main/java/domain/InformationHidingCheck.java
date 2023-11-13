@@ -34,8 +34,8 @@ public class InformationHidingCheck implements CheckStrategy {
             informationHidingViolations.add("No violations detected");
         } else {
             for (String[] violation : violations) {
-                informationHidingViolations
-                        .add("Class " + violation[0] + " has public field " + violation[1]);
+                informationHidingViolations.add(
+                        String.format("Class %s has public field %s", violation[0], violation[1]));
             }
         }
         return informationHidingViolations;

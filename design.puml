@@ -238,10 +238,16 @@ package domain {
         +getCheckName(): String
     }
     +class InformationHidingCheck implements CheckStrategy {
+        -violations: Set<String[]>
+        +InformationHidingCheck()
         +performCheck(classes: List<ClassNode>): void
+        -parseFields(classNode: ClassNode): void
         +handleResults(): List<String>
         +getCheckName(): String
     }
+    InformationHidingCheck .> ClassNode
+    InformationHidingCheck .> FieldNode
+
     +class ThreeLayerCheck implements CheckStrategy {
         +performCheck(classes: List<ClassNode>): void
         +handleResults(): List<String>
