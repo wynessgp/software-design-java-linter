@@ -84,6 +84,9 @@ public class StaticCheck implements CheckStrategy {
 				}
 			}
 		}
+        if (staticViolations.isEmpty()) {
+            staticViolations.add("No violations detected");
+        }
         return staticViolations;
     }
 
