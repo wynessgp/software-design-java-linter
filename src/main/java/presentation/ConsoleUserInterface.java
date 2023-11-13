@@ -44,7 +44,7 @@ public class ConsoleUserInterface implements UserInterface {
                 projectDirectory = new File(userInput.getNextLine());
                 break;
             default:
-                System.out.println("Detected command line argument");
+                System.out.println("Detected directory as command line argument");
                 projectDirectory = new File(args[0]);
                 break;
         }
@@ -78,7 +78,7 @@ public class ConsoleUserInterface implements UserInterface {
             sb.append(path).append(", ");
         }
         sb.delete(sb.length() - 2, sb.length());
-        System.out.println(sb.toString());
+        System.out.println(sb.toString() + "\n");
         promptForCheckOptions();
     }
 
@@ -92,7 +92,7 @@ public class ConsoleUserInterface implements UserInterface {
         Map<String, Object> checkTypes = runner.getCheckTypes();
         if (this.args.length < 2) {
             List<String> continueOptions = Arrays.asList(new String[] {"y", ""});
-            System.out.println("\nPlease select the checks you would like to perform:");
+            System.out.println("Please select the checks you would like to perform:");
             for (String check : checkTypes.keySet()) {
                 System.out.print("\t" + check + " check? [Y/n] ");
                 if (continueOptions.contains(userInput.getNextLine().toLowerCase())) {
@@ -105,6 +105,7 @@ public class ConsoleUserInterface implements UserInterface {
             }
         } else {
             String[] checksFromArgs = Arrays.copyOfRange(args, 1, args.length);
+            System.out.println("Detected checks in command line arguments");
             for (String arg : checksFromArgs) {
                 arg = arg.substring(0, 1).toUpperCase()
                         + arg.substring(1).replace("-", " ").toLowerCase();
@@ -129,11 +130,17 @@ public class ConsoleUserInterface implements UserInterface {
         System.out.print("Press enter to run checks");
         userInput.getNextLine();
         Map<String, List<String>> results = this.runner.runChecks();
+        System.out.println("\n----- Results -----");
         for (String resultName : results.keySet()) {
-            System.out.print(resultName + ": ");
-            System.out.println(results.get(resultName).isEmpty() ? "No results" : "");
-            for (String result : results.get(resultName)) {
-                System.out.println("\t" + result);
+            System.out.println(resultName + ": ");
+            if (results.get(resultName).isEmpty()) {
+                // Each check should return a "base" result if the check didn't find anything. This
+                // is here to catch any instances where the results are empty.
+                System.out.println("- No results");
+            } else {
+                for (String result : results.get(resultName)) {
+                    System.out.println("- " + result);
+                }
             }
         }
         promptForSavingResults();
