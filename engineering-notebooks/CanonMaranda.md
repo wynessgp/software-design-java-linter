@@ -196,3 +196,15 @@
   - User is prompted for each check, asking if they would like to run it
   - Uses a list of Class\<?> objects, not sure how to improve flexibilty for this functionality
   - Ready to run selected checks once user presses the enter key
+
+## 11/12 8-10pm
+### Plan:
+- Work on implementing checks
+  - Start with static check
+  - Update test cases
+
+### Progress:
+- Wrote algorithm for StaticMethodCheck
+  - Same approach as before, looking for instances of classes where all public items are static
+  - Provided updated test case (should fail the check)
+  - Working on providing proper output
