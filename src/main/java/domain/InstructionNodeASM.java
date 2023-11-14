@@ -9,7 +9,9 @@ public class InstructionNodeASM implements InstructionNode {
         this.instructionNode = instructionNode;
     }
 
-    // TODO: better way later. This is pretty bad lol
+    // This approach does not encompass all the instruction type possibilities. We have added only
+    // the ones we need for our checks. Since the ASM library uses ints to represent these types,
+    // there is not much we can do to support every type without a lot of cases.
     @Override
     public boolean matchesInstructionType(String type) {
         int calcType = 0;

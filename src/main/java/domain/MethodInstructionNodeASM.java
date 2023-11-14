@@ -15,7 +15,6 @@ public class MethodInstructionNodeASM extends InstructionNodeASM implements Meth
         this.methodInstructionNode = instructionNode;
     }
 
-    // TODO: Enum?
     @Override
     public boolean matchesInstructionType(String type) {
         return type.toLowerCase().equals("method_insn");
