@@ -44,7 +44,7 @@ public class HollywoodCheck implements CheckStrategy {
     }
 
     // this isn't split up into multiple parts for methods, instructions, etc.
-    // because the work would simply be looping in each one. 
+    // because the work would simply be looping in each one.
     private void parseInstructionsForViolation(ClassNode cn) {
         String superName = cn.getSuperName().replace("/", ".");
         String className = cn.getClassName().replace("/", ".");
@@ -63,8 +63,8 @@ public class HollywoodCheck implements CheckStrategy {
                 // check to see if the method's name is one of the exceptions,
                 // those being equals, hashCode, <init>, <clinit>
                 if (min.getMethodName().equals("equals") ||
-                    min.getMethodName().equals("hashCode") ||
-                    min.getMethodName().contains("init>"))
+                        min.getMethodName().equals("hashCode") ||
+                        min.getMethodName().contains("init>"))
                     continue;
                 // it's not one of our exceptions.
                 // now, does the method belong to our superclass?
