@@ -225,3 +225,30 @@
 - Update design
   - Using inheritance with InstructionNode adapter classes
 - Continue working on remaining checks later today
+
+## 11/13 6-10:30pm
+### Plan:
+- Implement information hiding and facade pattern checks
+
+### Progress:
+- Wrote information hiding check
+  - No algorithmic change from previous implementation
+- Updated how checks return "empty" results
+  - UI expects a "no violations detected" message or something similar
+  - If not, default "no results" text is displayed
+- Wrote facade pattern check
+  - Switched to searching for facade by package
+  - Looks for a class that calls others, but nothing in the package calls it
+  - A program's main class will always be detected as a facade
+  - "Possibly" keyword added to results since the pattern has a loose definition in this check
+- Wrote unit tests for my checks
+  - All follow the same format
+  - LintRunner and list of files are reset before each test
+  - Use RecursiveDiver to parse directories with .class files
+  - Make sure the expected number of files are found
+  - Run checks and check for consistent results
+- Begin implementing result saving
+  - Saves to results.txt in the project root directory
+  - Includes class names, check types, and check results
+- Add Javadocs for complicated methods
+- Wrote wiki pages for check algorithms
