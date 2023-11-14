@@ -18,8 +18,8 @@ public class MethodNodeASM implements MethodNode {
 
     @Override
     public boolean matchesAccess(String access) {
+        int accessLevel = 0;
         for (String a : access.split(" ")) {
-            int accessLevel = 0;
             switch (a.toLowerCase()) {
                 case "public":
                     accessLevel += Opcodes.ACC_PUBLIC;
@@ -43,13 +43,8 @@ public class MethodNodeASM implements MethodNode {
                     accessLevel += Opcodes.ACC_INTERFACE;
                     break;
             }
-            // check based on each individual string. If any of them are 0
-            // AKA doesn't match, then we don't match overall.
-            if ((accessLevel & methodNode.access) == 0)
-                return false; 
         }
-        // we've matched for all of the strings, so we're good.
-        return true;
+        return accessLevel == methodNode.access;
     }
 
     @Override
