@@ -276,6 +276,8 @@ n
 
 .idea/
 
+.vscode/
+
 !src/main/resources/*.class
 !src/main/resources/*/*.class
 !src/main/resources/*/*/*.class
