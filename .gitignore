@@ -278,6 +278,8 @@ n
 
 !src/main/resources/*.class
 !src/main/resources/*/*.class
+!src/main/resources/*/*/*.class
 !src/test/resources/*.class
 !src/test/resources/*/*.class
+!src/test/resources/*/*/*.class
 !lib/*.jar

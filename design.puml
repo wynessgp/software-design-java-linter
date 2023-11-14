@@ -1,3 +1,431 @@
 @startuml
-note "Replace this with your work" as N1
+package presentation {
+    +class Main {
+        +{static} main(args: String[]): void
+    }
+    Main .> UserInterface
+
+    +interface UserInterface {
+        +display(): void
+    }
+    +interface UserInput {
+        +getNextLine(): String
+    }
+    +class ConsoleUserInterface implements UserInterface {
+        - {static} {final} RESULTS_OUTPUT_FILE: String
+        -args: String[]
+        -userInput: UserInput
+        -projectDirectory: File
+        -reader: StandardInput
+        -writer: StandardOutput
+        -runner: LintRunner
+        -results: Map<String, List<String>>
+        -classes: List<String>
+        +ConsoleUserInterface(args: String[])
+        +display(): void
+        -promptForWorkingDirectory(): void
+        -displayDetectedFiles(): void
+        -promptForCheckOptions(): void
+        -runChecks(): void
+        -promptForSavingResults(): void
+        -saveResults(): void
+        -promptForCodeCleanup(): void
+        -promptForUmlGeneration(): void
+        -promptForSkeletonCodeGeneration(): void
+    }
+    ConsoleUserInterface -> UserInput
+
+    +class ConsoleScanner implements UserInput {
+        -scanner: Scanner
+        +ConsoleScanner()
+        +getNextLine(): String
+    }
+}
+ConsoleUserInterface -> domain.LintRunner
+ConsoleUserInterface .> domain.CheckStrategy
+ConsoleUserInterface -d-> "*" datasource.StandardInput
+ConsoleUserInterface -d-> "*" datasource.StandardOutput
+
+package domain {
+    +class LintRunner {
+        - {static} checkTypes: CheckStrategy[]
+        -checks: List<CheckStrategy>
+        -readers: List<ClassReader>
+        +LintRunner()
+        +createClassReaders(classNames: List<String>): List<String>
+        +addCheck(check: CheckStrategy): void
+        +runChecks(): Map<String, List<String>>
+        +getCheckTypes(): Map<String, Object>
+        +isChecksEmpty(): boolean
+    }
+    LintRunner -d-> "*" CheckStrategy
+    LintRunner -> "*" ClassReader
+
+    +interface ClassReader {
+        +acceptClass(className: String): boolean
+        +getClassNode(): ClassNode
+    }
+    +interface ClassNode {
+        +getFields(): List<FieldNode>
+        +getMethods(): List<MethodNode>
+        +getInterfaces(): List<String>
+        +isInterface(): boolean
+        +isAbstract(): boolean
+        +getSuperName(): String
+        +getClassName(): String
+        +matchesAccess(access: String): boolean
+    }
+    ClassNode .d.> FieldNode
+    ClassNode .d.> MethodNode
+
+    +interface FieldNode {
+        +getDesc(): String
+        +getFieldName(): String
+        +getFieldValue(): Object
+        +getFieldType(): String
+        +matchesAccess(access: String): boolean
+    }
+    +interface MethodNode {
+        +matchesAccess(access: String): boolean
+        +getDesc(): String
+        +getMethodName(): String
+        +getInstructions(): List<InstructionNode>
+        +getLocalVariables(): List<LocalVariableNode>
+        +getReturnType(): String
+        +getArgs(): Map<String, String>
+        +getArgTypes(): List<String>
+    }
+    MethodNode .d.> InstructionNode
+    +interface LocalVariableNode {
+        +getDesc(): String
+        +getIndex(): int
+        +getName(): String
+    }
+    MethodNode .d.> LocalVariableNode
+
+    +interface InstructionNode {
+        +matchesInstructionType(type: String): boolean
+        +getOpcode(): int
+        +getNextInstruction(): InstructionNode
+        +getPreviousInstruction(): InstructionNode
+        +toMethodInstruction(): MethodInstructionNode
+        +toFieldInstruction(): FieldInstructionNode
+        +toVarInstruction(): VarInstructionNode
+    }
+    InstructionNode .> MethodInstructionNode
+    InstructionNode .> FieldInstructionNode
+    InstructionNode .> VarInstructionNode
+
+    +interface MethodInstructionNode extends InstructionNode {
+        +getMethodName(): String
+        +getMethodOwner(): String
+        +getMethodDesc(): String
+    }
+    +interface FieldInstructionNode extends InstructionNode {
+        +getFieldName(): String
+        +getFieldOwner(): String
+        +getFieldDesc(): String
+    }
+    +interface VarInstructionNode extends InstructionNode {
+        +getVarIndex(): int
+    }
+
+    +class ClassReaderASM implements ClassReader {
+        -classReader: ClassReader
+        -classNode: ClassNode
+        +acceptClass(classPath: String): boolean
+        +getClassNode(): ClassNode
+    }
+    ClassReaderASM -> ClassNode
+
+    +class ClassNodeASM implements ClassNode {
+        -classNode: ClassNode
+        +ClassNodeASM()
+        +matchesAccess(access: String): boolean
+        +getFields(): List<FieldNode>
+        +getMethods(): List<MethodNode>
+        +getInterfaces(): List<String>
+        +isInterface(): boolean
+        +isAbstract(): boolean
+        +getSuperName(): String
+        +getClassName(): String
+        +getAsmNode(): ClassNode
+    }
+    +class MethodNodeASM implements MethodNode {
+        -methodNode: MethodNode
+        +MethodNodeASM(methodNode: MethodNode)
+        +matchesAccess(access: String): boolean
+        +getDesc(): String
+        +getMethodName(): String
+        +getInstructions(): List<InstructionNode>
+        +getLocalVariables(): List<LocalVariableNode>
+        +getReturnType(): String
+        +getArgs(): Map<String, String>
+        +getArgTypes(): List<String>
+    }
+    MethodNodeASM .l.> InstructionNode
+    MethodNodeASM .l.> LocalVariableNode
+    +class LocalVariableNodeASM implements LocalVariableNode {
+        -localVariableNode: LocalVariableNode
+        +LocalVariableNodeASM(lvn: LocalVariableNode)
+        +getDesc(): String
+        +getIndex(): int
+        +getName(): String
+    }
+
+    +class FieldNodeASM implements FieldNode {
+        -fieldNode: FieldNode
+        +FieldNodeASM(fieldNode: FieldNode)
+        +matchesAccess(access: String): boolean
+        +getDesc(): String
+        +getFieldName(): String
+        +getFieldValue(): Object
+        +getFieldType(): String
+    }
+    +class InstructionNodeASM implements InstructionNode {
+        #instructionNode: AbstractInsnNode
+        +InstructionNodeASM(instructionNode: AbstractInsnNode)
+        +matchesInstructionType(type: String): boolean
+        +getOpcode(): int
+        +getNextInstruction(): InstructionNode
+        +getPreviousInstruction(): InstructionNode
+        +toMethodInstruction(): MethodInstructionNode
+        +toFieldInstruction(): FieldInstructionNode
+        +toVarInstruction(): VarInstructionNode
+    }
+    +class MethodInstructionNodeASM extends InstructionNodeASM {
+        -methodInstructionNode: MethodInsnNode
+        +MethodInstructionNodeASM(insnNode: InstructionNode)
+        +MethodInstructionNodeASM(instructionNode: MethodInsnNode)
+        +matchesInstructionType(type: String): boolean
+        +getMethodName(): String
+        +getMethodOwner(): String
+        +getMethodDescription(): String
+    }
+    MethodInstructionNodeASM .u.|> MethodInstructionNode
+
+    +class FieldInstructionNodeASM extends InstructionNodeASM {
+        -fieldInstructionNode: FieldInsnNode
+        +FieldInstructionNodeASM(insnNode: InstructionNode)
+        +FieldInstructionNodeASM(fin: FieldInsnNode)
+        +matchesInstructionType(type: String): boolean
+        +getFieldName(): String
+        +getFieldOwner(): String
+        +getFieldDescription(): String
+    }
+    FieldInstructionNodeASM .u.|> FieldInstructionNode
+
+    +class VarInstructionNodeASM extends InstructionNodeASM {
+        -varInstructionNode: VarInsnNode
+        +VarInstructionNodeASM(insnNode: InstructionNode)
+        +VarInstructionNodeASM(instructionNode: VarInsnNode)
+        +matchesInstructionType(type: String): boolean
+        +getVarIndex(): int
+    }
+    VarInstructionNodeASM .u.|> VarInstructionNode
+
+    +interface CheckStrategy {
+        +performCheck(classes: List<ClassNode>): void
+        +handleResults(): List<String>
+        +getCheckName(): String
+    }
+    CheckStrategy .> ClassNode
+
+    +class StaticCheck implements CheckStrategy {
+        -visitedClasses: Set<String>
+        -nonStaticClasses: Set<String>
+        -classDependencies: Map<String, Set<String>>
+        +StaticCheck()
+        +performCheck(classes: List<ClassNode>): void
+        -parseFields(classNode: ClassNode): void
+        -parseMethods(classNode: ClassNode): void
+        -parseInstructions(classNode: ClassNode, methodNode: MethodNode): void
+        -addDeclaredVariable(dependant: String, dependency: String): void
+        +handleResults(): List<String>
+        +getCheckName(): String
+    }
+    StaticCheck .> ClassNode
+    StaticCheck .> FieldNode
+    StaticCheck .> MethodNode
+    StaticCheck .> InstructionNode
+    StaticCheck .> MethodInstructionNode
+
+    +class FormattingCheck implements CheckStrategy {
+        +performCheck(classes: List<ClassNode>): void
+        +handleResults(): List<String>
+        +getCheckName(): String
+    }
+    +class UnusedItemsCheck implements CheckStrategy {
+        -analyzedClasses: Set<String>
+        -classToUnusedFields: Map<String, Set<String>>
+        -classToUnusedMethods: Map<String, Set<String>>
+        -anticipatedMethodsByClass: Map<String, Set<String>>
+        -anticipatedFieldsByClass: Map<String, Set<String>>
+        -classToUnusedLocalVarsByMethod: Map<String, Map<String, Set<String>>>
+        +UnusedItemsCheck()
+        +performCheck(classes: List<ClassNode>): void
+        +handleResults(): List<String>
+        +getCheckName(): String
+        -parseFields(cn: ClassNode): void
+        -parseMethods(cn: ClassNode): void
+        -parseMethodInstructions(mn: MethodNode, cn: ClassNode): void
+        -addDeclaredField(className: String, fieldName: String): void
+        -addDeclaredMethod(className: String, methodName: String): void
+        -addAnticipatedField(anticipatedOwner: String, anticipatedField: String): void
+        -addAnticipatedMethod(anticipatedOwner: String, anticipatedMethod: String): void
+        -addUnusedLocalVariable(className: String, methodName: String, localVarName: String): void
+    }
+    ' we love spaghetti
+    UnusedItemsCheck .> ClassNode
+    UnusedItemsCheck .> FieldNode
+    UnusedItemsCheck .> MethodNode
+    UnusedItemsCheck .> LocalVariableNode
+    UnusedItemsCheck .> InstructionNode
+    UnusedItemsCheck .> FieldInstructionNode
+    UnusedItemsCheck .> MethodInstructionNode
+    UnusedItemsCheck .> VarInstructionNode
+
+    +class InformationHidingCheck implements CheckStrategy {
+        -violations: Set<String[]>
+        +InformationHidingCheck()
+        +performCheck(classes: List<ClassNode>): void
+        -parseFields(classNode: ClassNode): void
+        +handleResults(): List<String>
+        +getCheckName(): String
+    }
+    InformationHidingCheck .> ClassNode
+    InformationHidingCheck .> FieldNode
+
+    +class ThreeLayerCheck implements CheckStrategy {
+        +performCheck(classes: List<ClassNode>): void
+        +handleResults(): List<String>
+        +getCheckName(): String
+    }
+    +class HollywoodCheck implements CheckStrategy {
+        -classToViolatingCalls: Map<String, Set<String>>
+        -analyzedClasses: Set<String>
+        +HollywoodCheck()
+        +performCheck(classes: List<ClassNode>): void
+        +handleResults(): List<String>
+        +getCheckName(): String
+        -parseInstructionsForViolation(cn: ClassNode): void
+        -addViolation(methodCallName: String, classViolating: String): void
+    }
+    HollywoodCheck .> ClassNode
+    HollywoodCheck .> MethodNode
+    HollywoodCheck .> InstructionNode
+
+    +class FacadeCheck implements CheckStrategy {
+        -visitedClasses: Set<String>
+        -classDependencies: Map<String, Set<String>>
+        +performCheck(classes: List<ClassNode>): void
+        -parseFields(classNode: ClassNode): void
+        -parseMethods(classNode: ClassNode): void
+        -parseInstructions(classNode: ClassNode, methodNode: MethodNode): void
+        -trackDependency(dependant: String, dependency: String): void
+        +handleResults(): List<String>
+        +getCheckName(): String
+    }
+    FacadeCheck .> ClassNode
+    FacadeCheck .> FieldNode
+    FacadeCheck .> MethodNode
+    FacadeCheck .> InstructionNode
+    FacadeCheck .> MethodInstructionNode
+    FacadeCheck .> FieldInstructionNode
+
+    +class StrategyCheck implements CheckStrategy {
+        +performCheck(classes: List<ClassNode>): void
+        +handleResults(): List<String>
+        +getCheckName(): String
+    }
+    +class DecoratorCheck implements CheckStrategy {
+        -analyzedClasses: Set<String>
+        -abstractDecorators: Set<String>
+        -concreteDecorators: Set<String>
+        -abstractComponents: Set<String>
+        -concreteComponents: Set<String>
+        -outsideClasses: Set<String>
+        -interfaceNameToUnconfirmedConcreteComponents: Map<String, Set<String>>
+        -interfaceNameToUnconfirmedAbstractDecorators: Map<String, Set<String>>
+        -abstractDecoNameToUnconfirmedConcreteDecorators: Map<String, Set<String>>
+        +DecoratorCheck()
+        +performCheck(classes: List<ClassNode>): void
+        +handleResults(): List<String>
+        +getCheckName(): String
+        {method} // this is gonna get messy...
+        -parseForParticipationInPattern(cn: ClassNode): void
+        -abstractComponentCheck(cn: ClassNode): boolean
+        -abstractDecoratorCheck(cn: ClassNode): boolean
+        -concreteComponentCheck(cn: ClassNode): boolean
+        -concreteDecoratorCheck(cn: ClassNode): boolean
+        -confirmAbstractDecoratorsForClass(className: String): void
+        -confirmConcreteComponentsForClass(className: String): void
+        -confirmConcreteDecoratorsForClass(className: String): void
+        -addUnconfirmedAbstractDecoForInterface(interfaceName: String, absDecoName: String): void
+        -addUnconfirmedConcreteComponentForInterface(interfaceName: String, concreteComponentName: String): void
+        -addUnconfirmedConcreteDecoForAbstractDeco(absDecoName: String, concDecoName: String): void
+    }
+    DecoratorCheck .> ClassNode
+    DecoratorCheck .> FieldNode
+}
+
+package datasource {
+    +interface StandardOutput {
+        +write(s: String): void
+        +close(): void
+    }
+    +class FileOutput implements StandardOutput {
+        -bufferedWriter: BufferedWriter
+        +FileOutput(fp: String)
+        +write(s: String): void
+        +close(): void
+    }
+    +interface StandardInput {
+        +nextLine(): String
+        +hasNext(): boolean
+        +nextInt(): int
+        +next(): String
+    }
+    +class RecursiveDiver implements StandardInput {
+        -iter: Iterator<String>
+        +RecursiveDiver(path: File)
+        -findClassFiles(path: File): Set<String>
+        +nextLine(): String
+        +hasNext(): boolean
+        +nextInt(): int
+        +next(): String
+    }
+    +class FileReader {
+        +FileReader(path: File)
+    }
+    ClassReaderASM .> FileReader
+}
+
+package asm {
+    package tree {
+        asm.tree.MethodInsnNode -u-|> asm.tree.AbstractInsnNode
+        asm.tree.FieldInsnNode -u-|> asm.tree.AbstractInsnNode
+        asm.tree.VarInsnNode -u-|> asm.tree.AbstractInsnNode
+        asm.tree.ClassNode -d-> "*" asm.tree.FieldNode
+        asm.tree.ClassNode -d-> "*" asm.tree.MethodNode
+        asm.tree.MethodNode -d-> "*" asm.tree.AbstractInsnNode
+    }
+}
+
+domain.ClassReaderASM -> asm.ClassReader
+domain.ClassNodeASM -> asm.tree.ClassNode
+domain.ClassNodeASM -> asm.Opcodes
+domain.MethodNodeASM -> asm.tree.MethodNode
+domain.MethodNodeASM -> asm.Opcodes
+domain.MethodNodeASM -> asm.Type
+domain.MethodNodeASM -> asm.tree.AbstractInsnNode
+domain.MethodNodeASM -> asm.tree.LocalVariableNode
+domain.FieldNodeASM -> asm.tree.FieldNode
+domain.FieldNodeASM -> asm.Opcodes
+domain.FieldNodeASM -> asm.Type
+domain.InstructionNodeASM -> asm.tree.AbstractInsnNode
+domain.MethodInstructionNodeASM -> asm.tree.MethodInsnNode
+domain.FieldInstructionNodeASM -> asm.tree.FieldInsnNode
+domain.VarInstructionNodeASM -> asm.tree.VarInsnNode
+domain.LocalVariableNodeASM -> asm.tree.LocalVariableNode
 @enduml
