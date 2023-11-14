@@ -267,10 +267,23 @@ package domain {
     HollywoodCheck .> InstructionNode
 
     +class FacadeCheck implements CheckStrategy {
+        -visitedClasses: Set<String>
+        -classDependencies: Map<String, Set<String>>
         +performCheck(classes: List<ClassNode>): void
+        -parseFields(classNode: ClassNode): void
+        -parseMethods(classNode: ClassNode): void
+        -parseInstructions(classNode: ClassNode, methodNode: MethodNode): void
+        -trackDependency(dependant: String, dependency: String): void
         +handleResults(): List<String>
         +getCheckName(): String
     }
+    FacadeCheck .> ClassNode
+    FacadeCheck .> FieldNode
+    FacadeCheck .> MethodNode
+    FacadeCheck .> InstructionNode
+    FacadeCheck .> MethodInstructionNode
+    FacadeCheck .> FieldInstructionNode
+
     +class StrategyCheck implements CheckStrategy {
         +performCheck(classes: List<ClassNode>): void
         +handleResults(): List<String>
