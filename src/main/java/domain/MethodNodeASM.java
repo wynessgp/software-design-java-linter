@@ -99,4 +99,13 @@ public class MethodNodeASM implements MethodNode {
         return Arrays.asList(Type.getArgumentTypes(this.methodNode.desc)).stream()
                 .map(Type::getClassName).toList();
     }
+
+    @Override
+    public List<LocalVariableNode> getLocalVariables() {
+        List<LocalVariableNode> localVars = new ArrayList<>();
+        for (org.objectweb.asm.tree.LocalVariableNode lvn : this.methodNode.localVariables) {
+            localVars.add(new LocalVariableNodeASM(lvn));
+        }
+        return localVars;
+    }
 }

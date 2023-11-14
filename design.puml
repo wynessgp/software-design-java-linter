@@ -90,11 +90,18 @@ package domain {
         +getDesc(): String
         +getMethodName(): String
         +getInstructions(): List<InstructionNode>
+        +getLocalVariables(): List<LocalVariableNode>
         +getReturnType(): String
         +getArgs(): Map<String, String>
         +getArgTypes(): List<String>
     }
     MethodNode .d.> InstructionNode
+    +interface LocalVariableNode {
+        +getDesc(): String
+        +getIndex(): int
+        +getName(): String
+    }
+    MethodNode .d.> LocalVariableNode
 
     +interface InstructionNode {
         +matchesInstructionType(type: String): boolean
@@ -151,11 +158,20 @@ package domain {
         +getDesc(): String
         +getMethodName(): String
         +getInstructions(): List<InstructionNode>
+        +getLocalVariables(): List<LocalVariableNode>
         +getReturnType(): String
         +getArgs(): Map<String, String>
         +getArgTypes(): List<String>
     }
     MethodNodeASM .l.> InstructionNode
+    MethodNodeASM .l.> LocalVariableNode
+    +class LocalVariableNodeASM implements LocalVariableNode {
+        -localVariableNode: LocalVariableNode
+        +LocalVariableNodeASM(lvn: LocalVariableNode)
+        +getDesc(): String
+        +getIndex(): int
+        +getName(): String
+    }
 
     +class FieldNodeASM implements FieldNode {
         -fieldNode: FieldNode
@@ -240,10 +256,35 @@ package domain {
         +getCheckName(): String
     }
     +class UnusedItemsCheck implements CheckStrategy {
+        -analyzedClasses: Set<String>
+        -classToUnusedFields: Map<String, Set<String>>
+        -classToUnusedMethods: Map<String, Set<String>>
+        -anticipatedMethodsByClass: Map<String, Set<String>>
+        -anticipatedFieldsByClass: Map<String, Set<String>>
+        -classToUnusedLocalVarsByMethod: Map<String, Map<String, Set<String>>>
+        +UnusedItemsCheck()
         +performCheck(classes: List<ClassNode>): void
         +handleResults(): List<String>
         +getCheckName(): String
+        -parseFields(cn: ClassNode): void
+        -parseMethods(cn: ClassNode): void
+        -parseMethodInstructions(mn: MethodNode, cn: ClassNode): void
+        -addDeclaredField(className: String, fieldName: String): void
+        -addDeclaredMethod(className: String, methodName: String): void
+        -addAnticipatedField(anticipatedOwner: String, anticipatedField: String): void
+        -addAnticipatedMethod(anticipatedOwner: String, anticipatedMethod: String): void
+        -addUnusedLocalVariable(className: String, methodName: String, localVarName: String): void
     }
+    ' we love spaghetti
+    UnusedItemsCheck .> ClassNode
+    UnusedItemsCheck .> FieldNode
+    UnusedItemsCheck .> MethodNode
+    UnusedItemsCheck .> LocalVariableNode
+    UnusedItemsCheck .> InstructionNode
+    UnusedItemsCheck .> FieldInstructionNode
+    UnusedItemsCheck .> MethodInstructionNode
+    UnusedItemsCheck .> VarInstructionNode
+
     +class InformationHidingCheck implements CheckStrategy {
         -violations: Set<String[]>
         +InformationHidingCheck()
@@ -386,4 +427,5 @@ domain.InstructionNodeASM -> asm.tree.AbstractInsnNode
 domain.MethodInstructionNodeASM -> asm.tree.MethodInsnNode
 domain.FieldInstructionNodeASM -> asm.tree.FieldInsnNode
 domain.VarInstructionNodeASM -> asm.tree.VarInsnNode
+domain.LocalVariableNodeASM -> asm.tree.LocalVariableNode
 @enduml
