@@ -157,6 +157,9 @@ public class ConsoleUserInterface implements UserInterface {
         promptForSkeletonCodeGeneration();
     }
 
+    /**
+     * Ask the user if they would like to save the linting results to a predetermined file.
+     */
     private void promptForSavingResults() {
         System.out.print("\nWould you like to save the results? [y/N] ");
         if (userInput.getNextLine().toLowerCase().equals("y")) {
@@ -164,6 +167,9 @@ public class ConsoleUserInterface implements UserInterface {
         }
     }
 
+    /**
+     * Format and save the linting results.
+     */
     private void saveResults() {
         try {
             StringBuilder sb = new StringBuilder("----- Lint Boss -----\nClasses checked:\n");

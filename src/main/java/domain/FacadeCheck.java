@@ -57,6 +57,10 @@ public class FacadeCheck implements CheckStrategy {
         }
     }
 
+    /**
+     * Adds a dependency to the class dependencies map. Ignores circular dependencies. If the
+     * dependent and dependency packages don't match, do not add the dependency.
+     */
     private void trackDependency(String dependent, String dependency) {
         dependent = dependent.replace("/", ".");
         dependency = dependency.replace("/", ".");

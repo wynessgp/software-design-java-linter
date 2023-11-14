@@ -18,6 +18,10 @@ public class LintRunner {
         this.readers = new ArrayList<>();
     }
 
+    /**
+     * Creates ASM class readers from a list of class names. Returns a list of the classes that were
+     * successfully read.
+     */
     public List<String> createClassReaders(List<String> classNames) {
         List<String> classPaths = new ArrayList<>();
         for (String className : classNames) {
@@ -45,6 +49,9 @@ public class LintRunner {
         return results;
     }
 
+    /**
+     * Returns the available check types and their corresponding objects.
+     */
     public Map<String, Object> getCheckTypes() {
         Map<String, Object> types = new HashMap<>();
         for (CheckStrategy checkType : checkTypes) {

@@ -8,6 +8,10 @@ public class ClassReaderASM implements ClassReader {
     private org.objectweb.asm.ClassReader classReader;
     private ClassNode classNode;
 
+    /**
+     * Allows ASM to parse the given class. Returns true if the classReader successfully accepts the
+     * class as input.
+     */
     @Override
     public boolean acceptClass(String classPath) {
         try {

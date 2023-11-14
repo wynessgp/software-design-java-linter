@@ -45,16 +45,34 @@ public class InstructionNodeASM implements InstructionNode {
                 : new InstructionNodeASM(this.instructionNode.getPrevious());
     }
 
+    /**
+     * Converts this abstract InstructionNode into a MethodInstructionNode. Run after
+     * matchesInstructionType.
+     * 
+     * @see InstructionNodeASM#matchesInstructionType(String)
+     */
     @Override
     public MethodInstructionNode toMethodInstruction() {
         return new MethodInstructionNodeASM(this);
     }
 
+    /**
+     * Converts this abstract InstructionNode into a FieldInstructionNode. Run after
+     * matchesInstructionType.
+     * 
+     * @see InstructionNodeASM#matchesInstructionType(String)
+     */
     @Override
     public FieldInstructionNode toFieldInstruction() {
         return new FieldInstructionNodeASM(this);
     }
 
+    /**
+     * Converts this abstract InstructionNode into a VarInstructionNode. Run after
+     * matchesInstructionType.
+     * 
+     * @see InstructionNodeASM#matchesInstructionType(String)
+     */
     @Override
     public VarInstructionNode toVarInstruction() {
         return new VarInstructionNodeASM(this);

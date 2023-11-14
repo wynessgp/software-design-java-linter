@@ -16,6 +16,10 @@ public class MethodNodeASM implements MethodNode {
         this.methodNode = methodNode;
     }
 
+    /**
+     * Checks for the access level of the method. Takes in a string of space-separated modifiers and
+     * returns true if they match the integer access level.
+     */
     @Override
     public boolean matchesAccess(String access) {
         int accessLevel = 0;

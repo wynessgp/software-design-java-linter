@@ -49,6 +49,10 @@ public class ClassNodeASM implements ClassNode {
         return classNode.name.replace("/", ".");
     }
 
+    /**
+     * Checks for the access level of the class. Takes in a string of space-separated modifiers and
+     * returns true if they match the integer access level.
+     */
     @Override
     public boolean matchesAccess(String access) {
         for (String a : access.split(" ")) {
@@ -79,7 +83,7 @@ public class ClassNodeASM implements ClassNode {
             // check based on each individual string. If any of them are 0
             // AKA doesn't match, then we don't match overall.
             if ((accessLevel & classNode.access) == 0)
-                return false; 
+                return false;
         }
         // we've matched for all of the strings, so we're good.
         return true;

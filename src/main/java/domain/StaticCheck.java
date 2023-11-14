@@ -38,8 +38,7 @@ public class StaticCheck implements CheckStrategy {
 
     private void parseMethods(ClassNode classNode) {
         for (MethodNode method : classNode.getMethods()) {
-            if (method.matchesAccess("public")
-                    && !method.getMethodName().contains("init>")) {
+            if (method.matchesAccess("public") && !method.getMethodName().contains("init>")) {
                 nonStaticClasses.add(classNode.getClassName().replace("/", "."));
             }
             parseInstructions(classNode, method);
@@ -51,12 +50,16 @@ public class StaticCheck implements CheckStrategy {
             if (instruction.matchesInstructionType("method_insn")) {
                 MethodInstructionNode methodInstruction = instruction.toMethodInstruction();
                 if (methodInstruction.getMethodName().equals("<init>")) {
-                    addDeclaredVariable(classNode.getClassName(), methodInstruction.getMethodOwner());
+                    addDeclaredVariable(classNode.getClassName(),
+                            methodInstruction.getMethodOwner());
                 }
             }
         }
     }
-    
+
+    /**
+     * Adds variable declarations to the declared map. Ignores circular dependencies.
+     */
     private void addDeclaredVariable(String dependent, String dependency) {
         dependent = dependent.replace("/", ".");
         dependency = dependency.replace("/", ".");
@@ -77,13 +80,12 @@ public class StaticCheck implements CheckStrategy {
         HashSet<String> staticClasses = new HashSet<>(visitedClasses);
         staticClasses.removeAll(nonStaticClasses);
         for (String from : declared.keySet()) {
-			for (String to : declared.get(from)) {
-				if (staticClasses.contains(to) && !from.equals(to)) {
-                    staticViolations.add(String.format("Class %s should not declare %s", from,
-                            to));
-				}
-			}
-		}
+            for (String to : declared.get(from)) {
+                if (staticClasses.contains(to) && !from.equals(to)) {
+                    staticViolations.add(String.format("Class %s should not declare %s", from, to));
+                }
+            }
+        }
         if (staticViolations.isEmpty()) {
             staticViolations.add("No violations detected");
         }
