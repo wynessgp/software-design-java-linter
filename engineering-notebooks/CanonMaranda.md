@@ -272,3 +272,12 @@
   - Also copy over getName and getDesc (also in LocalVariableNodeASM) to allow for modifying the return string format easily in the future
   - Not updating ClassNodeASM because its matchesAccess method is different
 - Make PR with current changes (everything except extra feature)
+
+## 11/14 2:30-5pm
+### Plan:
+- Work on code to UML generation
+
+### Progress:
+- Spent most of my time looking for a UML generation library. The one I found doesn't work with Maven.
+  - Ignoring extra feature for now
+- Change where the results output file is initialized
