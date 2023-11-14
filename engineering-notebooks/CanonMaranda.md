@@ -252,3 +252,23 @@
   - Includes class names, check types, and check results
 - Add Javadocs for complicated methods
 - Wrote wiki pages for check algorithms
+
+## 11/14 9:30-11am
+### Plan
+- Review PR with bulk of implementation
+- Improve facade pattern check algorithm
+- Small refactoring changes
+
+### Progress
+- Merged implementation and notebook branches into main
+  - Resolved conflict in .gitignore file
+- Updated facade check
+  - If multiple classes in a package are detected as facades, then the pattern doesn't apply
+  - Updating definition to say that only one class per package can be a facade
+  - Updated wiki page with changes to definition
+  - Wrote new test case for this scenario
+- Method abstraction
+  - MethodNodeASM and FieldNodeASM have a matchesAccess method, which checks access modifiers with an space-separated input string. The implementations are the same, so calling this functionality from a common location would result in a more modifiable design.
+  - Also copy over getName and getDesc (also in LocalVariableNodeASM) to allow for modifying the return string format easily in the future
+  - Not updating ClassNodeASM because its matchesAccess method is different
+- Make PR with current changes (everything except extra feature)
