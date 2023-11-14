@@ -152,9 +152,7 @@ public class ConsoleUserInterface implements UserInterface {
             }
         }
         promptForSavingResults();
-        promptForCodeCleanup();
         promptForUmlGeneration();
-        promptForSkeletonCodeGeneration();
     }
 
     /**
@@ -196,15 +194,7 @@ public class ConsoleUserInterface implements UserInterface {
         }
     }
 
-    private void promptForCodeCleanup() {
-        System.out.println("\nCode cleanup not yet implemented");
-    }
-
     private void promptForUmlGeneration() {
         System.out.println("\nUML generation not yet implemented");
-    }
-
-    private void promptForSkeletonCodeGeneration() {
-        System.out.println("\nSkeleton code generation not yet implemented");
     }
 }
