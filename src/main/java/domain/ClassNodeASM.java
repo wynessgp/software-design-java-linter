@@ -40,6 +40,16 @@ public class ClassNodeASM implements ClassNode {
     }
 
     @Override
+    public boolean isInterface() {
+        return (classNode.access & Opcodes.ACC_INTERFACE) != 0;
+    }
+
+    @Override
+    public boolean isAbstract() {
+        return (classNode.access & Opcodes.ACC_ABSTRACT) != 0;
+    }
+
+    @Override
     public String getSuperName() {
         return classNode.superName.replace("/", ".");
     }
@@ -55,8 +65,8 @@ public class ClassNodeASM implements ClassNode {
      */
     @Override
     public boolean matchesAccess(String access) {
+        int accessLevel = 0;
         for (String a : access.split(" ")) {
-            int accessLevel = 0;
             switch (a.toLowerCase()) {
                 case "public":
                     accessLevel += Opcodes.ACC_PUBLIC;
@@ -80,16 +90,12 @@ public class ClassNodeASM implements ClassNode {
                     accessLevel += Opcodes.ACC_INTERFACE;
                     break;
             }
-            // check based on each individual string. If any of them are 0
-            // AKA doesn't match, then we don't match overall.
-            if ((accessLevel & classNode.access) == 0)
-                return false;
         }
-        // we've matched for all of the strings, so we're good.
-        return true;
+        return accessLevel == classNode.access;
     }
 
     public org.objectweb.asm.tree.ClassNode getAsmNode() {
         return classNode;
     }
+
 }

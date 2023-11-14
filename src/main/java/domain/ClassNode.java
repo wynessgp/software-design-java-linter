@@ -14,4 +14,8 @@ public interface ClassNode {
     public String getClassName();
 
     public boolean matchesAccess(String access);
+
+    public boolean isInterface();
+
+    public boolean isAbstract();
 }

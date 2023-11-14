@@ -69,6 +69,8 @@ package domain {
         +getFields(): List<FieldNode>
         +getMethods(): List<MethodNode>
         +getInterfaces(): List<String>
+        +isInterface(): boolean
+        +isAbstract(): boolean
         +getSuperName(): String
         +getClassName(): String
         +matchesAccess(access: String): boolean
@@ -136,6 +138,8 @@ package domain {
         +getFields(): List<FieldNode>
         +getMethods(): List<MethodNode>
         +getInterfaces(): List<String>
+        +isInterface(): boolean
+        +isAbstract(): boolean
         +getSuperName(): String
         +getClassName(): String
         +getAsmNode(): ClassNode
@@ -264,6 +268,7 @@ package domain {
         +handleResults(): List<String>
         +getCheckName(): String
         -parseInstructionsForViolation(cn: ClassNode): void
+        -addViolation(methodCallName: String, classViolating: String): void
     }
     HollywoodCheck .> ClassNode
     HollywoodCheck .> MethodNode
@@ -293,6 +298,7 @@ package domain {
         +getCheckName(): String
     }
     +class DecoratorCheck implements CheckStrategy {
+        -analyzedClasses: Set<String>
         -abstractDecorators: Set<String>
         -concreteDecorators: Set<String>
         -abstractComponents: Set<String>
@@ -305,11 +311,18 @@ package domain {
         +performCheck(classes: List<ClassNode>): void
         +handleResults(): List<String>
         +getCheckName(): String
-        -singleClassCheck(cn: ClassNode): void
+        {method} // this is gonna get messy...
+        -parseForParticipationInPattern(cn: ClassNode): void
         -abstractComponentCheck(cn: ClassNode): boolean
         -abstractDecoratorCheck(cn: ClassNode): boolean
         -concreteComponentCheck(cn: ClassNode): boolean
         -concreteDecoratorCheck(cn: ClassNode): boolean
+        -confirmAbstractDecoratorsForClass(className: String): void
+        -confirmConcreteComponentsForClass(className: String): void
+        -confirmConcreteDecoratorsForClass(className: String): void
+        -addUnconfirmedAbstractDecoForInterface(interfaceName: String, absDecoName: String): void
+        -addUnconfirmedConcreteComponentForInterface(interfaceName: String, concreteComponentName: String): void
+        -addUnconfirmedConcreteDecoForAbstractDeco(absDecoName: String, concDecoName: String): void
     }
     DecoratorCheck .> ClassNode
     DecoratorCheck .> FieldNode

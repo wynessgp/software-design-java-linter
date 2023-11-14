@@ -134,7 +134,7 @@ public class DecoratorCheck implements CheckStrategy {
 
     private boolean abstractComponentCheck(ClassNode cn) {
         // is the access type an interface?
-        if (cn.matchesAccess("interface")) {
+        if (cn.isInterface()) {
             // get the dotted form of the class name
             String dottedClassName = cn.getClassName().replace("/", ".");
             abstractComponents.add(dottedClassName);
@@ -154,7 +154,7 @@ public class DecoratorCheck implements CheckStrategy {
 
     private boolean abstractDecoratorCheck(ClassNode cn) {
         // is the access type abstract? If it isn't, we're done here.
-        if (!cn.matchesAccess("abstract"))
+        if (!cn.isAbstract())
             return false;
         // next sub-check relies on having an interface as a field, and implementing it.
         // so, check to see if it implements any interfaces.
@@ -193,9 +193,9 @@ public class DecoratorCheck implements CheckStrategy {
 
     private boolean concreteComponentCheck(ClassNode cn) {
         // make sure it's not an interface, or an abstract class
-        if (cn.matchesAccess("interface"))
+        if (cn.isInterface())
             return false;
-        if (cn.matchesAccess("abstract"))
+        if (cn.isAbstract())
             return false;
         // ok, it's not an interface or an abstract class.
         // do we implement an interface?
@@ -219,9 +219,9 @@ public class DecoratorCheck implements CheckStrategy {
 
     private boolean concreteDecoratorCheck(ClassNode cn) {
         // same abstract/interface check
-        if (cn.matchesAccess("interface"))
+        if (cn.isInterface())
             return false;
-        if (cn.matchesAccess("abstract"))
+        if (cn.isAbstract())
             return false;
         // does it extend a class?
         if (cn.getSuperName().isEmpty())
