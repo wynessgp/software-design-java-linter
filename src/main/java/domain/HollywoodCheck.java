@@ -30,7 +30,7 @@ public class HollywoodCheck implements CheckStrategy {
             if (classToViolatingCalls.containsKey(s)) {
                 ret.add("Class: " + s
                         + " violates the Hollywood Principle by calling the following: ");
-                ret.add("\t\t" + classToViolatingCalls.get(s));
+                ret.add("\t" + classToViolatingCalls.get(s));
             } 
         }
         if (ret.isEmpty()) {

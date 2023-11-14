@@ -95,9 +95,9 @@ public class DecoratorCheck implements CheckStrategy {
             if (!concreteComponents.isEmpty())
                 ret.add("\tConcrete components: " + concreteComponents.toString());
             if (!concreteDecorators.isEmpty())
-                ret.add("\tConcrete decorators: " + concreteDecorators.toString() + "\n");
+                ret.add("\tConcrete decorators: " + concreteDecorators.toString());
             if (!outsideClasses.isEmpty()) {
-                ret.add("Classes that do not participate in the decorator pattern: ");
+                ret.add("\nClasses that do not participate in the decorator pattern: ");
                 ret.add("\t" + outsideClasses.toString());
             }
         }
