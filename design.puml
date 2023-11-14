@@ -29,7 +29,6 @@ package presentation {
         -runChecks(): void
         -promptForSavingResults(): void
         -saveResults(): void
-        -promptForUmlGeneration(): void
     }
     ConsoleUserInterface -> UserInput
 
