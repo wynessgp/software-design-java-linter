@@ -81,8 +81,10 @@ public class MethodNodeASM extends ParamNodeASM implements MethodNode {
     @Override
     public List<LocalVariableNode> getLocalVariables() {
         List<LocalVariableNode> localVars = new ArrayList<>();
-        for (org.objectweb.asm.tree.LocalVariableNode lvn : this.methodNode.localVariables) {
-            localVars.add(new LocalVariableNodeASM(lvn));
+        if (this.methodNode.localVariables != null) {
+            for (org.objectweb.asm.tree.LocalVariableNode lvn : this.methodNode.localVariables) {
+                localVars.add(new LocalVariableNodeASM(lvn));
+            }
         }
         return localVars;
     }

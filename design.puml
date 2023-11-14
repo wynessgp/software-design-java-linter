@@ -271,7 +271,7 @@ package domain {
         -classToUnusedMethods: Map<String, Set<String>>
         -anticipatedMethodsByClass: Map<String, Set<String>>
         -anticipatedFieldsByClass: Map<String, Set<String>>
-        -classToUnusedLocalVarsByMethod: Map<String, Map<String, Set<String>>>
+        -classToImplementedInterfaces: Map<String, Set<String>>
         +UnusedItemsCheck()
         +performCheck(classes: List<ClassNode>): void
         +handleResults(): List<String>
@@ -283,17 +283,14 @@ package domain {
         -addDeclaredMethod(className: String, methodName: String): void
         -addAnticipatedField(anticipatedOwner: String, anticipatedField: String): void
         -addAnticipatedMethod(anticipatedOwner: String, anticipatedMethod: String): void
-        -addUnusedLocalVariable(className: String, methodName: String, localVarName: String): void
     }
     ' we love spaghetti
     UnusedItemsCheck .> ClassNode
     UnusedItemsCheck .> FieldNode
     UnusedItemsCheck .> MethodNode
-    UnusedItemsCheck .> LocalVariableNode
     UnusedItemsCheck .> InstructionNode
     UnusedItemsCheck .> FieldInstructionNode
     UnusedItemsCheck .> MethodInstructionNode
-    UnusedItemsCheck .> VarInstructionNode
 
     +class InformationHidingCheck implements CheckStrategy {
         -violations: Set<String[]>
@@ -419,6 +416,7 @@ package asm {
         asm.tree.ClassNode -d-> "*" asm.tree.FieldNode
         asm.tree.ClassNode -d-> "*" asm.tree.MethodNode
         asm.tree.MethodNode -d-> "*" asm.tree.AbstractInsnNode
+        asm.tree.MethodNode -d-> "*" asm.tree.LocalVariableNode
     }
 }
 
