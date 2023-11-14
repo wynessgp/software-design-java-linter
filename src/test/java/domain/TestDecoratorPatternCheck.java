@@ -7,9 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class DecoratorCheckTests {
+public class TestDecoratorPatternCheck {
 
     // check expects a list of ClassNodes to be passed in, so we'll need to do some setup. 
     private static List<String> testFiles;
@@ -56,7 +55,7 @@ public class DecoratorCheckTests {
     }
 
     @Test
-    public void decoratorPatternPasses_NoConreteClasses() {
+    public void decoratorPatternPasses_NoConcreteClasses() {
 
     }
 
