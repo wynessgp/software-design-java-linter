@@ -152,3 +152,103 @@
   - Ensure the design works
   - Begin adding private methods and fields to individual checks
 - Starting implementation on Wednesday
+
+## 11/8 10am-12pm
+### Plan:
+- Begin implementation
+
+### Progress:
+- Designed skeleton classes
+  - Updated UML to reflect changes made
+- Began functionality for ASM adapters and presentation layer
+  - Changed getAccess() to a method that checks for a list of access modifiers
+    - Plan to abstract it out
+
+## 11/10 10-11am
+### Plan:
+- Begin work on recursive file search
+
+### Progress:
+- Implemented findClassFiles() in RecursiveDiver
+  - Looks for all .class files in directory and adds paths to a set
+  - To be parsed in ASM ClassReader
+- Plan for ClassReader interface and adapter
+  - Used to parse .class files, check for existance
+
+## 11/11 7:30-10pm
+### Plan:
+- Update design to use facade pattern in domain layer
+  - Handles creating ClassReaders and running checks
+
+### Progress:
+- Created LintRunner class
+- Added functionality to ClassReader abstraction
+  - Handles finding the right .class file, creating ClassNode object
+- Program can successfully process .class files from a directory
+  - Uses InputStream method rather than class names for ClassReader
+
+## 11/12 2:30-3:30pm
+### Plan:
+- Prepare UI for running checks
+
+### Progress:
+- Implemented check options dialog
+  - User is prompted for each check, asking if they would like to run it
+  - Uses a list of Class\<?> objects, not sure how to improve flexibilty for this functionality
+  - Ready to run selected checks once user presses the enter key
+
+## 11/12 8-10pm
+### Plan:
+- Work on implementing checks
+  - Start with static check
+  - Update test cases
+
+### Progress:
+- Wrote algorithm for StaticMethodCheck
+  - Same approach as before, looking for instances of classes where all public items are static
+  - Provided updated test case (should fail the check)
+  - Working on providing proper output
+
+## 11/13 1-4:30pm
+### Plan:
+- Fix implementation of static check
+  - Add new adapters/methods if necessary
+- Work on remaining checks
+
+### Progress:
+- Updated arguments for faster debugging
+  - Running `java Main <dir> <check-name> ...` will import the directory and select the provided checks
+- Static check test produces correct output
+  - Look for public, non-static methods and fields to determine non-static classes
+  - Added methods to remove ASM types from check code
+- Additional static check test added
+- Update design
+  - Using inheritance with InstructionNode adapter classes
+- Continue working on remaining checks later today
+
+## 11/13 6-10:30pm
+### Plan:
+- Implement information hiding and facade pattern checks
+
+### Progress:
+- Wrote information hiding check
+  - No algorithmic change from previous implementation
+- Updated how checks return "empty" results
+  - UI expects a "no violations detected" message or something similar
+  - If not, default "no results" text is displayed
+- Wrote facade pattern check
+  - Switched to searching for facade by package
+  - Looks for a class that calls others, but nothing in the package calls it
+  - A program's main class will always be detected as a facade
+  - "Possibly" keyword added to results since the pattern has a loose definition in this check
+- Wrote unit tests for my checks
+  - All follow the same format
+  - LintRunner and list of files are reset before each test
+  - Use RecursiveDiver to parse directories with .class files
+  - Make sure the expected number of files are found
+  - Run checks and check for consistent results
+- Begin implementing result saving
+  - Saves to results.txt in the project root directory
+  - Includes class names, check types, and check results
+- Add Javadocs for complicated methods
+- Wrote wiki pages for check algorithms
