@@ -27,7 +27,7 @@ public class TestInformationHidingCheck {
     }
 
     @Test
-    public void testStaticCheckNoViolationsFound() {
+    public void testInformationHidingCheckNoViolationsFound() {
         // Add test files
         reader = new RecursiveDiver(new File(TEST_CLASS_DIRECTORY, "success"));
         while (reader.hasNext()) {
@@ -44,7 +44,7 @@ public class TestInformationHidingCheck {
     }
 
     @Test
-    public void testStaticCheckViolationFound() {
+    public void testInformationHidingCheckViolationFound() {
         // Add test files
         reader = new RecursiveDiver(new File(TEST_CLASS_DIRECTORY, "fail"));
         while (reader.hasNext()) {
