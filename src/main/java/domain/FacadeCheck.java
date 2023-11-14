@@ -62,12 +62,17 @@ public class FacadeCheck implements CheckStrategy {
         dependency = dependency.replace("/", ".");
         if (dependent.equals(dependency)) {
             return;
-        }
-        if (classDependencies.containsKey(dependent)) {
-            classDependencies.get(dependent).add(dependency);
-        } else {
-            classDependencies.put(dependent, new HashSet<String>());
-            classDependencies.get(dependent).add(dependency);
+        } else if (dependent.contains(".") && dependency.contains(".")) {
+            String dependentPackage = dependent.substring(0, dependent.indexOf("."));
+            String dependencyPackage = dependency.substring(0, dependency.indexOf("."));
+            if (!dependentPackage.equals(dependencyPackage)) {
+                return;
+            } else if (classDependencies.containsKey(dependent)) {
+                classDependencies.get(dependent).add(dependency);
+            } else {
+                classDependencies.put(dependent, new HashSet<String>());
+                classDependencies.get(dependent).add(dependency);
+            }
         }
     }
 
@@ -76,13 +81,11 @@ public class FacadeCheck implements CheckStrategy {
         List<String> facadeClasses = new ArrayList<>(visitedClasses);
         for (String s : classDependencies.keySet()) {
             for (String s2 : classDependencies.get(s)) {
-                if (facadeClasses.contains(s2)) {
-                    facadeClasses.remove(s2);
-                }
+                facadeClasses.remove(s2);
             }
         }
         return facadeClasses.isEmpty() ? List.of("No facade classes detected")
-                : facadeClasses.stream().map(s -> String.format("%s is a facade class", s))
+                : facadeClasses.stream().map(s -> String.format("%s is possibly a facade class", s))
                         .toList();
     }
 
