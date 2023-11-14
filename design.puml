@@ -151,6 +151,11 @@ package domain {
         +getClassName(): String
         +getAsmNode(): ClassNode
     }
+    +class ParamNodeASM {
+        +matchesAccess(access: String, nodeAccessLevel: int): boolean
+        +getDesc(unformattedDesc: String): String
+        +getName(unformattedName: String): String
+    }
     +class MethodNodeASM implements MethodNode {
         -methodNode: MethodNode
         +MethodNodeASM(methodNode: MethodNode)
@@ -165,6 +170,8 @@ package domain {
     }
     MethodNodeASM .l.> InstructionNode
     MethodNodeASM .l.> LocalVariableNode
+    MethodNodeASM -|> ParamNodeASM
+
     +class LocalVariableNodeASM implements LocalVariableNode {
         -localVariableNode: LocalVariableNode
         +LocalVariableNodeASM(lvn: LocalVariableNode)
@@ -172,6 +179,7 @@ package domain {
         +getIndex(): int
         +getName(): String
     }
+    LocalVariableNodeASM -|> ParamNodeASM
 
     +class FieldNodeASM implements FieldNode {
         -fieldNode: FieldNode
@@ -182,6 +190,8 @@ package domain {
         +getFieldValue(): Object
         +getFieldType(): String
     }
+    FieldNodeASM -|> ParamNodeASM
+
     +class InstructionNodeASM implements InstructionNode {
         #instructionNode: AbstractInsnNode
         +InstructionNodeASM(instructionNode: AbstractInsnNode)
@@ -415,13 +425,12 @@ package asm {
 domain.ClassReaderASM -> asm.ClassReader
 domain.ClassNodeASM -> asm.tree.ClassNode
 domain.ClassNodeASM -> asm.Opcodes
+domain.ParamNodeASM -> asm.Opcodes
 domain.MethodNodeASM -> asm.tree.MethodNode
-domain.MethodNodeASM -> asm.Opcodes
 domain.MethodNodeASM -> asm.Type
 domain.MethodNodeASM -> asm.tree.AbstractInsnNode
 domain.MethodNodeASM -> asm.tree.LocalVariableNode
 domain.FieldNodeASM -> asm.tree.FieldNode
-domain.FieldNodeASM -> asm.Opcodes
 domain.FieldNodeASM -> asm.Type
 domain.InstructionNodeASM -> asm.tree.AbstractInsnNode
 domain.MethodInstructionNodeASM -> asm.tree.MethodInsnNode

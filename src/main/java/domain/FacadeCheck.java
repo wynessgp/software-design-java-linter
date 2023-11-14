@@ -90,9 +90,13 @@ public class FacadeCheck implements CheckStrategy {
         }
         Map<String, Set<String>> packageMap = new HashMap<>();
         for (String s : potentialFacadeClasses) {
-            int lastDot = s.lastIndexOf(".");
-            String[] packageAndClass =
-                    new String[] {s.substring(0, lastDot), s.substring(lastDot + 1)};
+            String[] packageAndClass;
+            if (s.contains(".")) {
+                int lastDot = s.lastIndexOf(".");
+                packageAndClass = new String[] {s.substring(0, lastDot), s.substring(lastDot + 1)};
+            } else {
+                packageAndClass = new String[] {"default", s};
+            }
             packageMap.putIfAbsent(packageAndClass[0], new HashSet<>());
             packageMap.get(packageAndClass[0]).add(packageAndClass[1]);
         }
