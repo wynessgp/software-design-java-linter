@@ -53,7 +53,7 @@ public class TestUnusedItemsCheck {
         Map<String, List<String>> results = lr.runChecks();
         List<String> text = results.get("Unused items");
         assertEquals(1, results.size());
-        assertEquals(7, text.size());
+        assertEquals(6, text.size());
         // first line should say there's an issue with otherClass
         assertEquals(true, text.get(0).contains("OtherClass"));
         // second line should say it's with notUsedElsewhere
@@ -68,11 +68,6 @@ public class TestUnusedItemsCheck {
         // sixth line should say stuff about anotherUnusedMethod, unusedMethod
         assertEquals(true, text.get(5).contains("anotherUnusedMethod") && 
                             text.get(5).contains("unusedMethod"));
-        // seventh line should complain about local vars in goofyMethod
-        // should be about "bruh4" and "bruh7" (yes, very professional, I know)
-        assertEquals(true, text.get(6).contains("goofyMethod"));
-        assertEquals(true, text.get(6).contains("bruh4") &&
-                                    text.get(6).contains("bruh7"));
     }
 
 

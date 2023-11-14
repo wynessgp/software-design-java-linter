@@ -214,6 +214,41 @@
 - Pleased with our progress! Canon has made the UI very functional while I kind of just stalk around the domain layer.
 - He's had more experience, so I tend to just let him have his way.
 
+## 11/14 11am-1pm
+### Plan:
+- Run a couple more tests using interactivity to ensure everything works OK
+- Fix any associated bugs that might come up
+
+### Progress:
+- Had very bad bugs upon running the full domain through UnusedItems
+    - Local variable code ended up messing up a LOT of things
+    - Made it to where empty HashSets are generated for every class for:
+        - methods
+        - fields
+        - interfaces
+    - The map I had for local variables was causing me headaches, so I scrapped local variable support.
+    - In its stead, I added support for interface methods being used and then them getting used in the associated implementing classes.
+        - Hence the empty list of interfaces. It makes parsing easier.
+- Fixed my UnusedItems test cases to accomodate for local variables no longer being tracked
+    - Just remove one assertEquals line
+- Wiki page updated to reflect that local variables are no longer included in output, but interfaces are tracked
+
+## Design Decisions
+- Make the adapter pattern for the ASM library within our project into an interface tree (idea spearheaded by Bee).
+    - It just makes most things a little simpler only having to use methods and being guaranteed at least some usable semblence of results. We still do a lot of string replacing for "/" to ".", but that's our internal representation.
+- Removed local variable tracking from UnusedItems
+    - Having a double stacked map isn't exactly a great idea, plus removing it later would not be super easy to do (namely, we might accidentally get rid of looping variables instead)
+    - Added interface support in its place for method tracking
+- Made all of the checks follow a strategy pattern
+    - Enables easy running of checks & picking specific ones from our domain layer facade
+    - You can invoke the interface's methods without worry that it'll call something incorrectly
+- Made a facade called LintRunner in our domain layer (idea spearheaded by Canon).
+    - This facade provides just one entry point for the UI class instead of having the UI go everywhere
+    - Makes it to where we can generate checks and ClassNodes just once instead of constantly having to throw different IOExceptions everywhere.
+    - Also provides a good spot to do any last minute modification to output from checks if necessary
+
+
+
 
 
 
