@@ -14,9 +14,9 @@ Canon Maranda, Bee Cerasoli, Grant Wyness
 ## Features
 | Developer     | Style Check    | Principle Check     | Pattern Check     | A Feature (optional)   |
 |:--------------|:---------------|:--------------------|:------------------|:-----------------------|
-| Canon Maranda | Static methods | Information hiding  | Facade pattern    | Code to UML            |
+| Canon Maranda | Static methods | Information hiding  | Facade pattern    |                        |
 | Bee Cerasoli  | Formatting     | 3 Layer Principle   | Strategy Pattern  | UML to code            |
-| Grant Wyness  | Unused "items" | Hollywood Principle | Decorator Pattern | Unused "item" deletion |
+| Grant Wyness  | Unused "items" | Hollywood Principle | Decorator Pattern |                        |
 
 ## Configuration
 This program requires the user to provide a directory containing source code binaries for the linter to check. The user can specify a starting directory in two ways:

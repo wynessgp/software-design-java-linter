@@ -53,7 +53,7 @@ public class TestHollywoodCheck {
         Map<String, List<String>> results = lr.runChecks();
         assertEquals(1, results.size());
         assertEquals(2, results.get("Hollywood").size());
-        assertEquals("Class: hollywoodprinciple.MySubClass violates the Hollywood Principle by calling the following: ",
+        assertEquals("Class: hollywoodprinciple.MySubClass potentially violates the Hollywood Principle by calling the following: ",
                 results.get("Hollywood").get(0));
         assertEquals(true, results.get("Hollywood").get(1).contains("super.thisIsAMethod"));
     }

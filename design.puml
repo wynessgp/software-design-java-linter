@@ -29,9 +29,6 @@ package presentation {
         -runChecks(): void
         -promptForSavingResults(): void
         -saveResults(): void
-        -promptForCodeCleanup(): void
-        -promptForUmlGeneration(): void
-        -promptForSkeletonCodeGeneration(): void
     }
     ConsoleUserInterface -> UserInput
 

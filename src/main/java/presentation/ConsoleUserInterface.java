@@ -29,7 +29,6 @@ public class ConsoleUserInterface implements UserInterface {
         this.args = args;
         this.userInput = new ConsoleScanner();
         this.runner = new LintRunner();
-        this.writer = new FileOutput(RESULTS_OUTPUT_FILE);
         this.results = new HashMap<>();
     }
 
@@ -152,9 +151,6 @@ public class ConsoleUserInterface implements UserInterface {
             }
         }
         promptForSavingResults();
-        promptForCodeCleanup();
-        promptForUmlGeneration();
-        promptForSkeletonCodeGeneration();
     }
 
     /**
@@ -186,6 +182,7 @@ public class ConsoleUserInterface implements UserInterface {
                 sb.append("\n");
             }
             sb.delete(sb.length() - 1, sb.length());
+            this.writer = new FileOutput(RESULTS_OUTPUT_FILE);
             writer.write(sb.toString());
             System.out
                     .println("Results saved to " + new File(RESULTS_OUTPUT_FILE).getAbsolutePath());
@@ -194,17 +191,5 @@ public class ConsoleUserInterface implements UserInterface {
             System.out.println("Error saving results");
             System.exit(1);
         }
-    }
-
-    private void promptForCodeCleanup() {
-        System.out.println("\nCode cleanup not yet implemented");
-    }
-
-    private void promptForUmlGeneration() {
-        System.out.println("\nUML generation not yet implemented");
-    }
-
-    private void promptForSkeletonCodeGeneration() {
-        System.out.println("\nSkeleton code generation not yet implemented");
     }
 }
