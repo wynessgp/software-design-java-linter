@@ -12,12 +12,15 @@ package presentation {
         +getNextLine(): String
     }
     +class ConsoleUserInterface implements UserInterface {
+        - {static} {final} RESULTS_OUTPUT_FILE: String
         -args: String[]
         -userInput: UserInput
         -projectDirectory: File
         -reader: StandardInput
         -writer: StandardOutput
         -runner: LintRunner
+        -results: Map<String, List<String>>
+        -classes: List<String>
         +ConsoleUserInterface(args: String[])
         +display(): void
         -promptForWorkingDirectory(): void
@@ -314,14 +317,14 @@ package domain {
 
 package datasource {
     +interface StandardOutput {
-        +write(s: String, off: int, len: int): void
-        +write(c: int): void
+        +write(s: String): void
+        +close(): void
     }
     +class FileOutput implements StandardOutput {
         -bufferedWriter: BufferedWriter
         +FileOutput(fp: String)
-        +write(s: String, off: int, len: int): void
-        +write(c: int): void
+        +write(s: String): void
+        +close(): void
     }
     +interface StandardInput {
         +nextLine(): String

@@ -15,11 +15,13 @@ public class FileOutput implements StandardOutput {
         }
     }
 
-    public void write(String s, int off, int len) throws IOException {
-        this.bufferedWriter.write(s, off, len);
+    @Override
+    public void write(String s) throws IOException {
+        this.bufferedWriter.write(s);
     }
 
-    public void write(int c) throws IOException {
-        this.bufferedWriter.write(c);
+    @Override
+    public void close() throws IOException {
+        this.bufferedWriter.close();
     }
 }

@@ -1,11 +1,13 @@
 package presentation;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import datasource.FileOutput;
 import datasource.RecursiveDiver;
 import datasource.StandardInput;
 import datasource.StandardOutput;
@@ -13,16 +15,22 @@ import domain.CheckStrategy;
 import domain.LintRunner;
 
 public class ConsoleUserInterface implements UserInterface {
+    private static final String RESULTS_OUTPUT_FILE = "results.txt";
     private String[] args;
     private UserInput userInput;
     private File projectDirectory;
     private StandardInput reader;
     private StandardOutput writer;
     private LintRunner runner;
+    private Map<String, List<String>> results;
+    private List<String> classes;
 
     public ConsoleUserInterface(String[] args) {
         this.args = args;
         this.userInput = new ConsoleScanner();
+        this.runner = new LintRunner();
+        this.writer = new FileOutput(RESULTS_OUTPUT_FILE);
+        this.results = new HashMap<>();
     }
 
     @Override
@@ -73,8 +81,8 @@ public class ConsoleUserInterface implements UserInterface {
             System.exit(1);
         }
         StringBuilder sb = new StringBuilder("Found: ");
-        this.runner = new LintRunner();
-        for (String path : runner.createClassReaders(classPaths)) {
+        this.classes = runner.createClassReaders(classPaths);
+        for (String path : classes) {
             sb.append(path).append(", ");
         }
         sb.delete(sb.length() - 2, sb.length());
@@ -129,16 +137,16 @@ public class ConsoleUserInterface implements UserInterface {
     private void runChecks() {
         System.out.print("Press enter to run checks");
         userInput.getNextLine();
-        Map<String, List<String>> results = this.runner.runChecks();
+        this.results = this.runner.runChecks();
         System.out.println("\n----- Results -----");
-        for (String resultName : results.keySet()) {
+        for (String resultName : this.results.keySet()) {
             System.out.println(resultName + ": ");
             if (results.get(resultName).isEmpty()) {
                 // Each check should return a "base" result if the check didn't find anything. This
                 // is here to catch any instances where the results are empty.
                 System.out.println("- No results");
             } else {
-                for (String result : results.get(resultName)) {
+                for (String result : this.results.get(resultName)) {
                     System.out.println("- " + result);
                 }
             }
@@ -150,23 +158,47 @@ public class ConsoleUserInterface implements UserInterface {
     }
 
     private void promptForSavingResults() {
-        saveResults();
+        System.out.print("\nWould you like to save the results? [y/N] ");
+        if (userInput.getNextLine().toLowerCase().equals("y")) {
+            saveResults();
+        }
     }
 
     private void saveResults() {
-
+        try {
+            StringBuilder sb = new StringBuilder("----- Lint Boss -----\nClasses checked:\n");
+            for (String className : classes) {
+                sb.append(className).append(", ");
+            }
+            sb.delete(sb.length() - 2, sb.length());
+            sb.append("\n\nCheck results:\n");
+            for (String resultName : results.keySet()) {
+                sb.append(resultName).append("\n");
+                for (String result : results.get(resultName)) {
+                    sb.append("- ").append(result).append("\n");
+                }
+                sb.append("\n");
+            }
+            sb.delete(sb.length() - 1, sb.length());
+            writer.write(sb.toString());
+            System.out
+                    .println("Results saved to " + new File(RESULTS_OUTPUT_FILE).getAbsolutePath());
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error saving results");
+            System.exit(1);
+        }
     }
 
     private void promptForCodeCleanup() {
-
+        System.out.println("\nCode cleanup not yet implemented");
     }
 
     private void promptForUmlGeneration() {
-
+        System.out.println("\nUML generation not yet implemented");
     }
 
     private void promptForSkeletonCodeGeneration() {
-
+        System.out.println("\nSkeleton code generation not yet implemented");
     }
-
 }
