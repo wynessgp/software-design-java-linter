@@ -16,7 +16,6 @@ public class FieldInstructionNodeASM extends InstructionNodeASM implements Field
         this.fieldInstructionNode = instructionNode;
     }
 
-    // TODO: Enum?
     @Override
     public boolean matchesInstructionType(String type) {
         return type.toLowerCase().equals("field_insn");

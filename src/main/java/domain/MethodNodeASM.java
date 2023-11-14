@@ -6,10 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
-public class MethodNodeASM implements MethodNode {
+public class MethodNodeASM extends ParamNodeASM implements MethodNode {
     private org.objectweb.asm.tree.MethodNode methodNode;
 
     public MethodNodeASM(org.objectweb.asm.tree.MethodNode methodNode) {
@@ -17,48 +16,27 @@ public class MethodNodeASM implements MethodNode {
     }
 
     /**
-     * Checks for the access level of the method. Takes in a string of space-separated modifiers and
-     * returns true if they match the integer access level.
+     * @see ParamNodeASM#matchesAccess(String, int)
      */
     @Override
     public boolean matchesAccess(String access) {
-        int accessLevel = 0;
-        for (String a : access.split(" ")) {
-            switch (a.toLowerCase()) {
-                case "public":
-                    accessLevel += Opcodes.ACC_PUBLIC;
-                    break;
-                case "private":
-                    accessLevel += Opcodes.ACC_PRIVATE;
-                    break;
-                case "protected":
-                    accessLevel += Opcodes.ACC_PROTECTED;
-                    break;
-                case "static":
-                    accessLevel += Opcodes.ACC_STATIC;
-                    break;
-                case "final":
-                    accessLevel += Opcodes.ACC_FINAL;
-                    break;
-                case "abstract":
-                    accessLevel += Opcodes.ACC_ABSTRACT;
-                    break;
-                case "interface":
-                    accessLevel += Opcodes.ACC_INTERFACE;
-                    break;
-            }
-        }
-        return accessLevel == methodNode.access;
+        return super.matchesAccess(access, methodNode.access);
     }
 
+    /**
+     * @see ParamNodeASM#getDesc(String)
+     */
     @Override
     public String getDesc() {
-        return this.methodNode.desc.replace("/", ".");
+        return super.getDesc(methodNode.desc);
     }
 
+    /**
+     * @see ParamNodeASM#getName(String)
+     */
     @Override
     public String getMethodName() {
-        return this.methodNode.name.replace("/", ".");
+        return super.getName(methodNode.name);
     }
 
     @Override

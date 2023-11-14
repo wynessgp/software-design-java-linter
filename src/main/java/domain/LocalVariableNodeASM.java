@@ -1,15 +1,18 @@
 package domain;
 
-public class LocalVariableNodeASM implements LocalVariableNode {
+public class LocalVariableNodeASM extends ParamNodeASM implements LocalVariableNode {
     private org.objectweb.asm.tree.LocalVariableNode localVariableNode;
 
     public LocalVariableNodeASM(org.objectweb.asm.tree.LocalVariableNode localVariableNode) {
         this.localVariableNode = localVariableNode;
     }
 
+    /**
+     * @see ParamNodeASM#getDesc(String)
+     */
     @Override
     public String getDesc() {
-        return this.localVariableNode.desc.replace("/", ".");
+        return super.getDesc(localVariableNode.desc);
     }
 
     @Override
@@ -17,9 +20,12 @@ public class LocalVariableNodeASM implements LocalVariableNode {
         return this.localVariableNode.index;
     }
 
+    /**
+     * @see ParamNodeASM#getName(String)
+     */
     @Override
     public String getName() {
-        return this.localVariableNode.name;
+        return super.getName(localVariableNode.name);
     }
-    
+
 }

@@ -66,4 +66,22 @@ public class TestFacadePatternCheck {
         assertEquals("presentation.MyMainClass is possibly a facade class",
                 results.get("Facade").get(0));
     }
+
+    @Test
+    public void testFacadePatternMultipleInPackage() {
+        // Add test files
+        reader = new RecursiveDiver(new File(TEST_CLASS_DIRECTORY, "multiple-in-package"));
+        while (reader.hasNext()) {
+            testFiles.add(reader.next());
+        }
+        List<String> classPaths = runner.createClassReaders(testFiles);
+        assertEquals(4, classPaths.size());
+
+        // Run and parse checks
+        Map<String, List<String>> results = runner.runChecks();
+        assertEquals(1, results.size());
+        assertEquals(1, results.get("Facade").size());
+        assertEquals("presentation.MyMainClass is possibly a facade class",
+                results.get("Facade").get(0));
+    }
 }

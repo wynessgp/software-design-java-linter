@@ -82,15 +82,34 @@ public class FacadeCheck implements CheckStrategy {
 
     @Override
     public List<String> handleResults() {
-        List<String> facadeClasses = new ArrayList<>(visitedClasses);
+        List<String> potentialFacadeClasses = new ArrayList<>(visitedClasses);
         for (String s : classDependencies.keySet()) {
             for (String s2 : classDependencies.get(s)) {
-                facadeClasses.remove(s2);
+                potentialFacadeClasses.remove(s2);
             }
         }
-        return facadeClasses.isEmpty() ? List.of("No facade classes detected")
-                : facadeClasses.stream().map(s -> String.format("%s is possibly a facade class", s))
-                        .toList();
+        Map<String, Set<String>> packageMap = new HashMap<>();
+        for (String s : potentialFacadeClasses) {
+            String[] packageAndClass;
+            if (s.contains(".")) {
+                int lastDot = s.lastIndexOf(".");
+                packageAndClass = new String[] {s.substring(0, lastDot), s.substring(lastDot + 1)};
+            } else {
+                packageAndClass = new String[] {"default", s};
+            }
+            packageMap.putIfAbsent(packageAndClass[0], new HashSet<>());
+            packageMap.get(packageAndClass[0]).add(packageAndClass[1]);
+        }
+        for (String pkg : packageMap.keySet()) {
+            if (packageMap.get(pkg).size() > 1) {
+                for (String className : packageMap.get(pkg)) {
+                    potentialFacadeClasses.remove(String.format("%s.%s", pkg, className));
+                }
+            }
+        }
+        return potentialFacadeClasses.isEmpty() ? List.of("No facade classes detected")
+                : potentialFacadeClasses.stream()
+                        .map(s -> String.format("%s is possibly a facade class", s)).toList();
     }
 
     @Override
