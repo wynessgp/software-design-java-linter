@@ -167,5 +167,55 @@
     - Can't get rid of looping variables without knowing scope of the loop, which is hard
 - Looking to do more work tonight, but it may carry over into Sunday (11/12), so this is the commit.
 
+## 11/12 6pm-11pm?
+### Plan:
+- Move over Hollywood Principle algorithm to main project
+- Add necessary classes as needed to support its functionality
+- Write wiki pages for algos
+
+### Progress:
+- Hollywood Principle algo fully integrated into Linter
+    - Checks and other testing code not yet written, but will be moved soon
+- Added variable instruction nodes, made small updates to method and field instruction nodes
+    - Wanted to make string checking consistent with ASM, although it didn't really matter
+- Wiki pages written for currently integrated algorithms.
+- (I am writing this journal entry with hindsight)
+
+## 11/13 4pm-11:59pm 
+### Plan:
+- Get test code working for already moved checks (decorator, hollywood)
+- Move unused items check over & refactor it, write test cases for it.
+- Implement supporting classes as necessary
+- Update design as necessary
+
+### Progress:
+- Test code written for decorator/hollywood
+    - Strong focus on using contains as opposed to checking strict structure on results
+    - Note that since they use toString for sets and the like, there was bound to be permutations which would mess up a strict .equals check
+    - More complex tests for Decorator, basic ones for hollywood (pass/fail).
+- Updated design for decorator to reflect new methods and fields being added
+    - There are a lot of private methods that all do small things
+- Changed ClassNode to have isAbstract() and isInterface()
+    - Slightly more flexible, meant to get around a big bug with how our matchesAccess worked, specifically with ClassNodes
+        - Some weirdness with it having "open" as a modifier as well, and interfaces were more like "abstract interface"
+- Note: work continued over into 11/14 in the early hours of the morning.
+
+## 11/14 12am-3am
+### Plan:
+- Get unused items algo up and running on the Linter
+- Write test cases for unused items algo
+- Update design as necessary
+
+### Progress:
+- Unused items algorithm is fully supported
+- There are test cases to go with it, one fail and one pass
+- Design reflects updated methods used for unused items check, and fields.
+    - Side note: might need to make additional revisions to facilitate deleting items
+- Pleased with our progress! Canon has made the UI very functional while I kind of just stalk around the domain layer.
+- He's had more experience, so I tend to just let him have his way.
+
+
+
+
 
 
